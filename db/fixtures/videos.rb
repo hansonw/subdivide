@@ -1,3 +1,4 @@
 Video.seed do |v|
-  v.url = '//iterate.ca/video.mp4'
+  v.id  = 2
+  v.url = "//iterate.ca/video.webm"
 end
