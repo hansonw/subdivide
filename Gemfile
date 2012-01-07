@@ -38,3 +38,4 @@ group :test do
 end
 
 gem 'seed-fu'
+gem 'slim'
