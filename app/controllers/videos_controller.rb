@@ -7,11 +7,49 @@ class VideosController < ApplicationController
       format.json { render :json => @videos }
     end
   end
-# index
-# new
-# create
-# show
-# edit
-# update
-# destroy
+
+  def new
+    respond_to do |format|
+      format.html # new.html.slim
+    end
+  end
+
+  def edit
+    respond_to do |format|
+      format.html # edit.html.slim
+    end
+  end
+
+  def create
+    @response = []
+    respond_to do |format|
+      format.xml  { render :xml => @response }
+      format.json { render :json => @response }
+    end
+  end
+
+  def show
+    @response = []
+    respond_to do |format|
+      format.html # show.html.slim
+      format.xml  { render :xml => @response }
+      format.json { render :json => @response }
+    end
+  end
+
+  def update
+    @response = []
+    respond_to do |format|
+      format.xml  { render :xml => @response }
+      format.json { render :json => @response }
+    end
+  end
+
+  def destroy
+    @response = []
+    respond_to do |format|
+      format.xml  { render :xml => @response }
+      format.json { render :json => @response }
+    end
+  end
 end
