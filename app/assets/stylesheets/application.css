@@ -5,3 +5,22 @@
  *= require_self
  *= require_tree . 
 */
+
+#container {
+  width: 1024px;
+}
+
+#video {
+  float: left;
+}
+
+#subtitle_edit {
+  float: right;
+  width: 360px;
+}
+
+#time_points {
+  padding-top: 10px;
+  clear: both;
+}
+
