@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class TimePointControllerTest < ActionController::TestCase
+class VideosControllerTest < ActionController::TestCase
   # test "the truth" do
   #   assert true
   # end
