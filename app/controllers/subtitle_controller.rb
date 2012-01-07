@@ -1,0 +1,2 @@
+class SubtitleController < ApplicationController
+end
