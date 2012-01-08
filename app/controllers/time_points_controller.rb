@@ -1,6 +1,6 @@
 class TimePointsController < ApplicationController
   def index
-    @timepoints = TimePoint.all
+    @timepoints = Video.find(params[:video_id]).time_point
     respond_to do |format|
       format.html # index.html.slim
       format.xml  { render :xml => @timepoints }
@@ -22,6 +22,7 @@ class TimePointsController < ApplicationController
 
   def create
     @time_point = TimePoint.new do |tp|
+      tp.video_id = params[:video_id]
       tp.time = params[:time]
       tp.time_point_type = ('true' == params[:time_point_type])
       tp.voice = params[:voice]

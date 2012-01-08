@@ -1,4 +1,3 @@
 class Subtitle < ActiveRecord::Base
-  belongs_to :video
-  has_many :time_points
+  belongs_to :time_points
 end
