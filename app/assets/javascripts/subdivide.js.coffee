@@ -7,6 +7,7 @@ pad = (num, d) ->
 class TimePoint
   constructor: (@voice, @time, @type) ->
     @id = -1
+    @end = null
     @sub = null
     @div = null
 
@@ -96,7 +97,8 @@ class Subtitle
       new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
       if new_time == null || new_time <= @start_time.time
         event.currentTarget.innerHTML =
-          if @end_time then @end_time.formatTime() else @start_time.formatTime()
+          if @end_time then @end_time.formatTime() \
+          else @start_time.formatTime()
       else
         if @end_time == null
           @end_time = new TimePoint(@start_time.voice, new_time, true)
@@ -122,7 +124,8 @@ class Subtitle
     div.append(' - ')
     div.append($('<span />').addClass('endTime')
                             .prop('contenteditable', true)
-                            .append(@start_time.formatTime())
+                            .append(if @end_time then @end_time.formatTime() \
+                                    else @start_time.formatTime())
                             .keydown(@handleEndTimeEdit))
     div.append($('<div />').addClass('voice')
                            .append('Voice ' + (@start_time.voice+1) + ':'))
@@ -197,6 +200,7 @@ class Subdivide
           pt.div.css('left', @timeToWidth(pt.time))
       else if prevVoice[pt.voice]
         prev = prevVoice[pt.voice]
+        prev.end = pt
         prev.div.css('width', @timeToWidth(pt.time - prev.time))
         if prev.sub
           prev.sub.end_time = pt
@@ -228,6 +232,8 @@ class Subdivide
     pt = (pt for pt in @time_points when pt.id == json.time_point_id)
     if pt.length > 0
       sub = new Subtitle(pt[0], json.text)
+      if pt[0].end
+        sub.end_time = pt[0].end
       sub.id = json.id
       @subtitles.push(sub)
       @subtitles.sort((a, b) -> a.start_time.time - b.start_time.time)
