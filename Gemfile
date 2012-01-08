@@ -40,3 +40,5 @@ end
 gem 'seed-fu'
 gem 'slim'
 gem 'juggernaut'
+gem 'uuidtools'
+
