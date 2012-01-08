@@ -34,7 +34,7 @@ class TimePointsController < ApplicationController
 
     if @time_point.save()
       data = {:type => 'create_time_point', :value => @time_point}
-      Juggernaut.publish("channel1", data)
+      Juggernaut.publish(@time_point.video.uuid, data)
     else
       status = 400
     end

@@ -1,5 +1,10 @@
 h1 Subdivide
 
+javascript:
+  function get_channel_name() {
+    return '#{@video.uuid}';
+  }
+
 div id="container"
   video id="video" controls="controls" width=640 height=360
     source src==@video.url
