@@ -1,7 +1,9 @@
 Subdivide::Application.routes.draw do
-  resources :videos
-  resources :subtitles
-  resources :time_points
+  resources :videos do
+    resources :time_points do 
+      resources :subtitles
+    end
+  end
   root :to => 'videos#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.

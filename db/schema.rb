@@ -11,12 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120108010833) do
+ActiveRecord::Schema.define(:version => 20120108014855) do
 
   create_table "subtitles", :force => true do |t|
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "time_point_id"
   end
 
   create_table "time_points", :force => true do |t|
@@ -25,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20120108010833) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "time_point_type"
+    t.integer  "video_id"
   end
 
   create_table "videos", :force => true do |t|
