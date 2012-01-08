@@ -24,10 +24,10 @@ class TimePoint
     @div = div
     return div
 
-  _onSaveSuccess: (data) =>
+  _onCreateSuccess: (data) =>
     @id = data['id']
 
-  save: =>
+  create: =>
     data = {
         voice: @voice,
         time: @time,
@@ -37,18 +37,19 @@ class TimePoint
         type: 'POST',
         url: location.pathname + '/time_points.json',
         data: data,
-        success: @_onSaveSuccess
+        success: @_onCreateSuccess
     })
 
 class Subtitle
   constructor: (@start_time, @text) ->
     @end_time = null
+    @create()
 
   handleKeypress: (event) =>
     if event.keyCode == 13  # return
       event.currentTarget.blur()
       @text = event.currentTarget.innerHTML
-      @save()
+      @update()
 
   createDiv: (div_container) ->
     div = $('<div />')
@@ -72,11 +73,12 @@ class Subtitle
     $('.startTime', @div).replaceWith(@start_time.formatTime())
     $('.endTime', @div).replaceWith(@end_time.formatTime())
 
-  _onSaveSuccess: (data) =>
+  _onCreateSuccess: (data) =>
     @id = data['id']
-    console.log @
 
-  save: =>
+  _onUpdateSuccess: (data) =>
+
+  create: =>
     data = {
         text: @text
     }
@@ -84,7 +86,18 @@ class Subtitle
         type: 'POST',
         url: location.pathname + '/time_points/' + @start_time.id + '/subtitles.json',
         data: data,
-        success: @_onSaveSuccess
+        success: @_onCreateSuccess
+    })
+
+  update: =>
+    data = {
+        text: @text
+    }
+    jQuery.ajax({
+        type: 'PUT',
+        url: location.pathname + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
+        data: data,
+        success: @_onUpdateSuccess
     })
 
 class Subdivide
@@ -104,51 +117,13 @@ class Subdivide
     Math.ceil(time / @video.prop('duration') * @time_points_div.width())
 
   addTimePoint: (voice, time, type) ->
-    prev = -1
-    for pt in @time_points
-      if pt.voice == voice
-        if pt.time == time
-          return false
-        if pt.type == false
-          prev = pt.time
-        else if time >= prev && time <= pt.time
-          return false
-      
     time_point = new TimePoint(voice, time, type)
-    if type == false
-      sub = new Subtitle(time_point, '')
-      time_point.sub = sub
-      div = sub.createDiv(@subtitle_edit_div)
-      insert_index = -1
-      for s, i in @subtitles
-        if s.start_time.time > time
-          insert_index = i
-          break
-      if insert_index == -1
-        @subtitle_edit_div.append(div)
-        @subtitles.push(sub)
-      else
-        div.insertBefore(@subtitles[insert_index].div)
-        @subtitles.splice(insert_index, 0, sub)
-      div.click(=> @setActiveSubtitle(sub))
-      @setActiveSubtitle(sub)
-      @time_points_div.append(
-        time_point.createDiv(@colors[voice], @timeToWidth(time))
-                  .click(=> @setActiveSubtitle(sub)))
-    else
-      # find the immediately preceding time point of this voice
-      prec = (pt for pt in @time_points when pt.time < time and pt.voice == voice)
-      if prec.length > 0 && prec[prec.length-1].type == false
-        pt = prec[prec.length-1]
-        pt.sub.end_time = time_point
-        pt.sub.updateTimes()
-        pt.div.css('width', @timeToWidth(time - pt.time))
-      else
-        return false
+    time_point.create()
 
-    time_point.save()
+  procAddTimePoint: (time_point) ->
+    console.log(time_point)
     @time_points.push(time_point)
-    @time_points.sort((a,b) -> a.time - b.time)
+    @subtitles.push(time_point.sub)
 
   setActiveSubtitle: (sub) ->
     div = sub.div
@@ -173,20 +148,22 @@ class Subdivide
 
   procMouseUp: (event) =>
 
-  @initJug: ->
+  initJug: =>
     window.jug = new Juggernaut({
       secure: false,
       host: 'simple-earth-9425.herokuapp.com',
       port: 80,
       transports: ['xhr-polling', 'jsonp-polling']
     })
-    jug.subscribe("channel1", (data) ->
-        console.log("Got data:")
-        console.log(data)
-      )
+    jug.subscribe("channel1", (data) =>
+      if data.type == 'update_subtitle'
+        @procUpdateSubtitle(data.value)
+      else if data.type == 'create_time_point'
+        @procAddTimePoint(data.value)
+    )
 
 
 $(document).ready(() ->
   window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
-  Subdivide.initJug()
+  window.subdivide.initJug()
 )
