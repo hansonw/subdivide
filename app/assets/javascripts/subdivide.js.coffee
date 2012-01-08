@@ -211,7 +211,7 @@ class Subdivide
       port: 80,
       transports: ['xhr-polling', 'jsonp-polling']
     })
-    jug.subscribe("channel1", (data) =>
+    jug.subscribe(get_channel_name(), (data) =>
       if data.type == 'update_subtitle'
         @procUpdateSubtitle(data.value)
       else if data.type == 'create_time_point'
