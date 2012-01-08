@@ -15,6 +15,7 @@
 }
 
 #subtitle_edit {
+  position: relative;
   float: right;
   width: 360px;
   height: 360px;

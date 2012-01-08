@@ -79,6 +79,7 @@ class Subtitle
     @div = null
 
   handleStartTimeEdit: (event) =>
+    event.stopPropagation()
     if event.keyCode == 13  # return
       event.currentTarget.blur()
       new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
@@ -89,6 +90,7 @@ class Subtitle
         @start_time.update()
 
   handleEndTimeEdit: (event) =>
+    event.stopPropagation()
     if event.keyCode == 13  # return
       event.currentTarget.blur()
       new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
@@ -104,6 +106,7 @@ class Subtitle
           @end_time.update()
 
   handleTextEdit: (event) =>
+    event.stopPropagation()
     if event.keyCode == 13  # return
       event.currentTarget.blur()
       @text = event.currentTarget.innerHTML
@@ -115,18 +118,18 @@ class Subtitle
     div.append($('<span />').addClass('startTime')
                             .prop('contenteditable', true)
                             .append(@start_time.formatTime())
-                            .keypress(@handleStartTimeEdit))
+                            .keydown(@handleStartTimeEdit))
     div.append(' - ')
     div.append($('<span />').addClass('endTime')
                             .prop('contenteditable', true)
                             .append(@start_time.formatTime())
-                            .keypress(@handleEndTimeEdit))
+                            .keydown(@handleEndTimeEdit))
     div.append($('<div />').addClass('voice')
                            .append('Voice ' + (@start_time.voice+1) + ':'))
     div.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
                            .append('..')
-                           .keypress(@handleTextEdit))
+                           .keydown(@handleTextEdit))
     @div = div
     return div
 
