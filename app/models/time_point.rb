@@ -1,3 +1,4 @@
 class TimePoint < ActiveRecord::Base
-  belongs_to :subtitle
+  belongs_to :video
+  has_many :subtitle
 end

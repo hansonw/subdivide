@@ -1,3 +1,4 @@
 class Video < ActiveRecord::Base
-  has_many :subtitles
+  has_many :time_point
+  has_many :subtitle, :through => :time_point
 end
