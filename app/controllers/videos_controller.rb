@@ -21,32 +21,38 @@ class VideosController < ApplicationController
   end
 
   def create
-    @response = []
+    @video = Video.new do |v|
+      v.url = params[:url]
+    end
+    @video.save()
     respond_to do |format|
-      format.xml  { render :xml => @response }
-      format.json { render :json => @response }
+      format.xml  { render :xml => @video }
+      format.json { render :json => @video }
     end
   end
 
   def show
-    @response = []
+    @video = Video.find(params[:id])
     respond_to do |format|
       format.html # show.html.slim
-      format.xml  { render :xml => @response }
-      format.json { render :json => @response }
+      format.xml  { render :xml => @video }
+      format.json { render :json => @video }
     end
   end
 
   def update
-    @response = []
+    @video = Video.find(params[:id])
+    @video.url = params[:url]
+    @video.save()
     respond_to do |format|
-      format.xml  { render :xml => @response }
-      format.json { render :json => @response }
+      format.xml  { render :xml => @video }
+      format.json { render :json => @video }
     end
   end
 
   def destroy
-    @response = []
+    Video.destroy(params[:id])
+    @response = [:destroy => 'destroy']
     respond_to do |format|
       format.xml  { render :xml => @response }
       format.json { render :json => @response }
