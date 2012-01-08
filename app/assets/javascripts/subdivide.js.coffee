@@ -227,6 +227,9 @@ class Subdivide
         success: (data) =>
           for value in data
             @procAddTimePoint(value)
+            console.log @time_points
+          # subtitles can only be loaded after ALL time points have been created
+          for value in data
             @loadSubtitles(value['id'])
     })
 
@@ -237,6 +240,7 @@ class Subdivide
         success: (data) =>
           for value in data
             @procAddSubtitle(value)
+            @procUpdateSubtitle(value)
     })
 
 $(document).ready(() ->
