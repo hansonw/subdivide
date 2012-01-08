@@ -31,34 +31,12 @@ class TimePointsController < ApplicationController
     end
 
     status = 200
-    time_points =
-      TimePoint.where(:video_id => params[:video_id], :voice => voice)
-               .order('time')
-    prev = -1
-    for pt in time_points
-      if pt.time == time
-        status = 400
-      end
-      if pt.time_point_type == 0
-        prev = pt.time.to_f
-      elsif time >= prev && time <= pt.time.to_f
-        status = 400
-      end
-    end
-    
-    if params[:time_point_type] == "true"
-      # find the immediately preceding time point of this voice
-      prec = time_points.find_all{|pt| pt.time.to_f < time && pt.voice == voice.to_i}
-      y prec
-      if prec.length == 0 || prec.last.time_point_type == 1
-        status = 400
-      end
-    end
 
-    if status == 200
-      @time_point.save()
+    if @time_point.save()
       data = {:type => 'create_time_point', :value => @time_point}
       Juggernaut.publish("channel1", data)
+    else
+      status = 400
     end
     respond_to do |format|
       format.xml  { render :xml => @time_point }
