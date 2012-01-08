@@ -79,40 +79,36 @@ class Subtitle
     @end_time = null
     @div = null
 
-  handleStartTimeEdit: (event) =>
+  handleKeydown: (event) =>
     event.stopPropagation()
     if event.keyCode == 13  # return
       event.currentTarget.blur()
-      new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
-      if new_time == null
-        event.currentTarget.innerHTML = @start_time.formatTime()
-      else
-        @start_time.time = new_time
-        @start_time.update()
+
+  handleStartTimeEdit: (event) =>
+    new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
+    if new_time == null
+      event.currentTarget.innerHTML = @start_time.formatTime()
+    else
+      @start_time.time = new_time
+      @start_time.update()
 
   handleEndTimeEdit: (event) =>
-    event.stopPropagation()
-    if event.keyCode == 13  # return
-      event.currentTarget.blur()
-      new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
-      if new_time == null || new_time <= @start_time.time
-        event.currentTarget.innerHTML =
-          if @end_time then @end_time.formatTime() \
-          else @start_time.formatTime()
+    new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
+    if new_time == null || new_time <= @start_time.time
+      event.currentTarget.innerHTML =
+        if @end_time then @end_time.formatTime() \
+        else @start_time.formatTime()
+    else
+      if @end_time == null
+        @end_time = new TimePoint(@start_time.voice, new_time, 1)
+        @end_time.create()
       else
-        if @end_time == null
-          @end_time = new TimePoint(@start_time.voice, new_time, 1)
-          @end_time.create()
-        else
-          @end_time.time = new_time
-          @end_time.update()
+        @end_time.time = new_time
+        @end_time.update()
 
   handleTextEdit: (event) =>
-    event.stopPropagation()
-    if event.keyCode == 13  # return
-      event.currentTarget.blur()
-      @text = event.currentTarget.innerHTML
-      @update()
+    @text = event.currentTarget.innerHTML
+    @update()
 
   createDiv: ->
     div = $('<div />')
@@ -120,19 +116,22 @@ class Subtitle
     div.append($('<span />').addClass('startTime')
                             .prop('contenteditable', true)
                             .append(@start_time.formatTime())
-                            .keydown(@handleStartTimeEdit))
+                            .keydown(@handleKeydown)
+                            .blur(@handleStartTimeEdit))
     div.append(' - ')
     div.append($('<span />').addClass('endTime')
                             .prop('contenteditable', true)
                             .append(if @end_time then @end_time.formatTime() \
                                     else @start_time.formatTime())
-                            .keydown(@handleEndTimeEdit))
+                            .keydown(@handleKeydown)
+                            .blur(@handleEndTimeEdit))
     div.append($('<div />').addClass('voice')
                            .append('Voice ' + (@start_time.voice+1) + ':'))
     div.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
                            .append('..')
-                           .keydown(@handleTextEdit))
+                           .keydown(@handleKeydown)
+                           .blur(@handleTextEdit))
     @div = div
     return div
 
