@@ -45,8 +45,8 @@ class Subtitle
 
   handleKeypress: (event) =>
     if event.keyCode == 13  # return
-      event.currentTarget.lastChild.blur()
-      @text = event.currentTarget.lastChild.innerHTML
+      event.currentTarget.blur()
+      @text = event.currentTarget.innerHTML
       @save()
 
   createDiv: (div_container) ->
