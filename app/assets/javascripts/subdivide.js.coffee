@@ -204,7 +204,6 @@ class Subdivide
 
   createSubtitleDivs: ->
     prev = null
-    console.log(@subtitles)
     for sub in @subtitles
       if !sub.div
         sub.div = sub.createDiv()
@@ -257,7 +256,6 @@ class Subdivide
     @video.prop('currentTime', sub.start_time.time)
   
   procKeyDown: (event) =>
-    console.log(event)
     voice_min = '1'.charCodeAt(0)
     voice_max = voice_min + 3
     if event.keyCode == 16 # shift
@@ -300,7 +298,6 @@ class Subdivide
         success: (data) =>
           for value in data
             @procAddTimePoint(value)
-            console.log @time_points
           # subtitles can only be loaded after ALL time points have been created
           for value in data
             @loadSubtitles(value['id'])
@@ -317,6 +314,7 @@ class Subdivide
     })
 
 $(document).ready(() ->
-  window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
-  window.subdivide.init()
+  $('#video')[0].addEventListener('durationchange', () ->
+    window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
+    window.subdivide.init())
 )
