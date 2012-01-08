@@ -3,7 +3,7 @@ class TimePoint < ActiveRecord::Base
   has_many :subtitle
 
   validates :time, :presence => true
-  validate :end_must_follow_start, :tp_must_not_preceed_end, :unique
+  validate :end_must_follow_start, :tp_must_not_preceed_end, :unique, :on => :create
 
   def end_must_follow_start
     if time_point_type == 1

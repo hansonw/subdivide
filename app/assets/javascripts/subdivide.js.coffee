@@ -285,6 +285,7 @@ class Subdivide
       transports: ['xhr-polling', 'jsonp-polling']
     })
     jug.subscribe(get_channel_name(), (data) =>
+      console.log(data)
       if data.type == 'update_subtitle'
         @procUpdateSubtitle(data.value)
       else if data.type == 'update_time_point'
