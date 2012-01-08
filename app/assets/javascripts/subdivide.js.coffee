@@ -118,6 +118,10 @@ class Subdivide
     @shift_pressed = false
     @colors = ['blue', 'red', 'green', 'black']
 
+  init: =>
+    @loadTimePoints()
+    @initJug()
+
   timeToWidth: (time) ->
     Math.ceil(time / @video.prop('duration') * @time_points_div.width())
 
@@ -215,9 +219,27 @@ class Subdivide
       else if data.type == 'create_subtitle'
         @procAddSubtitle(data.value)
     )
+  
+  loadTimePoints: =>
+    jQuery.ajax({
+        type: 'GET',
+        url: location.pathname + '/time_points.json',
+        success: (data) =>
+          for value in data
+            @procAddTimePoint(value)
+            @loadSubtitles(value['id'])
+    })
 
+  loadSubtitles: (time_point_id) =>
+    jQuery.ajax({
+        type: 'GET',
+        url: location.pathname + '/time_points/' + time_point_id + '/subtitles.json',
+        success: (data) =>
+          for value in data
+            @procAddSubtitle(value)
+    })
 
 $(document).ready(() ->
   window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
-  window.subdivide.initJug()
+  window.subdivide.init()
 )
