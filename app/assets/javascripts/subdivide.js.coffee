@@ -106,8 +106,6 @@ class Subdivide
       
     time_point = new TimePoint(voice, time, type)
     if type == false
-      @time_points_div.append(
-        time_point.createDiv(@colors[voice], @timeToWidth(time)))
       sub = new Subtitle(time_point, '')
       time_point.sub = sub
       div = sub.createDiv(@subtitle_edit_div)
@@ -123,6 +121,9 @@ class Subdivide
         div.insertBefore(@subtitles[insert_index].div)
         @subtitles.splice(insert_index, 0, sub)
       @setActiveSubtitle(div)
+      @time_points_div.append(
+        time_point.createDiv(@colors[voice], @timeToWidth(time))
+                  .click(=> @setActiveSubtitle(div)))
     else
       # find the immediately preceding time point of this voice
       prec = (pt for pt in @time_points when pt.time < time and pt.voice == voice)
