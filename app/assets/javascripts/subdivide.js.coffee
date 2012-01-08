@@ -7,6 +7,8 @@ pad = (num, d) ->
 class TimePoint
   constructor: (@voice, @time, @type) ->
     @id = -1
+    @sub = null
+    @div = null
 
   formatTime: () ->
     h = Math.floor(@time / 3600)
@@ -26,6 +28,9 @@ class TimePoint
 
   _onCreateSuccess: (data) =>
     @id = data['id']
+    if !@type
+      sub = new Subtitle(@, '')
+      sub.create()
 
   create: =>
     data = {
@@ -42,8 +47,9 @@ class TimePoint
 
 class Subtitle
   constructor: (@start_time, @text) ->
+    @id = -1
     @end_time = null
-    @create()
+    @div = null
 
   handleKeypress: (event) =>
     if event.keyCode == 13  # return
@@ -51,7 +57,7 @@ class Subtitle
       @text = event.currentTarget.innerHTML
       @update()
 
-  createDiv: (div_container) ->
+  createDiv: ->
     div = $('<div />')
     div.addClass('subtitle_edit_box')
     div.append($('<span />').addClass('startTime')
@@ -69,7 +75,6 @@ class Subtitle
     return div
 
   updateTimes: ->
-    console.log('hi')
     $('.startTime', @div).replaceWith(@start_time.formatTime())
     $('.endTime', @div).replaceWith(@end_time.formatTime())
 
@@ -116,14 +121,61 @@ class Subdivide
   timeToWidth: (time) ->
     Math.ceil(time / @video.prop('duration') * @time_points_div.width())
 
+  createTimePointDivs: ->
+    prevVoice = {}
+    for pt in @time_points
+      if !pt.type
+        prevVoice[pt.voice] = pt
+        if pt.div == null
+          @time_points_div.append(
+            pt.createDiv(@colors[pt.voice], @timeToWidth(pt.time)))
+      else if prevVoice[pt.voice]
+        prev = prevVoice[pt.voice]
+        prev.div.css('width', @timeToWidth(pt.time - prev.time))
+        if prev.sub
+          prev.sub.end_time = pt
+          prev.sub.updateTimes()
+
+  createSubtitleDivs: ->
+    prev = null
+    console.log(@subtitles)
+    for sub in @subtitles
+      if !sub.div
+        sub.div = sub.createDiv()
+        if prev == null
+          @subtitle_edit_div.prepend(sub.div)
+        else
+          sub.div.insertAfter(prev.div)
+      prev = sub
+
   addTimePoint: (voice, time, type) ->
     time_point = new TimePoint(voice, time, type)
     time_point.create()
 
-  procAddTimePoint: (time_point) ->
-    console.log(time_point)
+  procAddTimePoint: (json) ->
+    time_point = new TimePoint(json.voice, json.time, json.time_point_type)
+    time_point.id = json.id
     @time_points.push(time_point)
-    @subtitles.push(time_point.sub)
+    @time_points.sort((a, b) -> a.time - b.time)
+    @createTimePointDivs()
+
+  procAddSubtitle: (json) ->
+    pt = (pt for pt in @time_points when pt.id == json.time_point_id)
+    if pt.length > 0
+      sub = new Subtitle(pt[0], json.text)
+      sub.id = json.id
+      @subtitles.push(sub)
+      @subtitles.sort((a, b) -> a.start_time.time - b.start_time.time)
+      @createSubtitleDivs()
+      sub.div.click(=> @setActiveSubtitle(sub))
+      pt[0].div.click(=> @setActiveSubtitle(sub))
+      pt[0].sub = sub
+
+  procUpdateSubtitle: (json) ->
+    for sub in @subtitles
+      if sub.id == json.id
+        sub.text = json.text
+        $('.subtitleText', sub.div).html(sub.text)
 
   setActiveSubtitle: (sub) ->
     div = sub.div
@@ -160,6 +212,8 @@ class Subdivide
         @procUpdateSubtitle(data.value)
       else if data.type == 'create_time_point'
         @procAddTimePoint(data.value)
+      else if data.type == 'create_subtitle'
+        @procAddSubtitle(data.value)
     )
 
 
