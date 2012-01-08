@@ -60,8 +60,11 @@ class TimePointsController < ApplicationController
     @time_point.voice = params[:voice]
     if @time_point.save()
       data = {:type => 'update_time_point', :value => @time_point}
-      Juggernaut.publish(@time_point.video.uuid, data)
+    else
+      data = {:type => 'update_time_point',
+              :value => TimePoint.find(params[:id])}
     end
+    Juggernaut.publish(@time_point.video.uuid, data)
     respond_to do |format|
       format.xml  { render :xml => @time_point }
       format.json { render :json => @time_point }

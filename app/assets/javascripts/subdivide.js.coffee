@@ -273,7 +273,7 @@ class Subdivide
 
   setActiveSubtitle: (sub) ->
     div = sub.div
-    @subtitle_edit_div.scrollTop(div.position().top)
+    @subtitle_edit_div.scrollTop(div.position().top + @subtitle_edit_div.scrollTop())
     $('.subtitle_edit_box').removeClass('selected')
     div.addClass('selected')
     @video.prop('currentTime', sub.start_time.time)
