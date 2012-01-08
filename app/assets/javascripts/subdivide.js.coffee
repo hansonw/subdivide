@@ -47,9 +47,11 @@ class Subtitle
     if this.innerHTML == 'Enter text here..'
       this.innerHTML = ''
 
-  handleKeypress: (event) ->
+  handleKeypress: (event) =>
     if event.keyCode == 13  # return
       event.currentTarget.lastChild.blur()
+      @text = event.currentTarget.lastChild.innerHTML
+      @save()
 
   createDiv: (div_container) ->
     div = $('<div />')
@@ -65,6 +67,21 @@ class Subtitle
                            .keypress(@handleKeypress)
     @div = div
     return div
+
+  _onSaveSuccess: (data) =>
+    @id = data['id']
+    console.log @
+
+  save: =>
+    data = {
+        text: @text
+    }
+    jQuery.ajax({
+        type: 'POST',
+        url: location.pathname + '/time_points/' + @time_point.id + '/subtitles.json',
+        data: data,
+        success: @_onSaveSuccess
+    })
 
 class Subdivide
   constructor: (@video, @time_points_div, @subtitle_edit_div) ->
