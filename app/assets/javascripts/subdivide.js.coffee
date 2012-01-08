@@ -23,12 +23,27 @@ class TimePoint
     @div = div
     return div
 
+  save: =>
+    data = {
+        voice: @voice,
+        time: @time,
+        time_point_type: @type
+    }
+    jQuery.ajax({
+        type: 'POST',
+        url: '/time_points.json',
+        data: data,
+        succcess: (data) ->
+          console.log data
+          console.log data[id]
+    })
+
 class Subtitle
   constructor: (@time_point, @text) ->
 
   handleClick: (event) ->
-    if event.currentTarget.innerHTML == 'Enter text here..'
-      event.currentTarget.innerHTML = ''
+    if this.innerHTML == 'Enter text here..'
+      this.innerHTML = ''
 
   handleKeypress: (event) ->
     if event.keyCode == 13  # return
@@ -51,10 +66,10 @@ class Subtitle
 
 class Subdivide
   constructor: (@video, @time_points_div, @subtitle_edit_div) ->
-    $(document).keydown $.proxy(@procKeyDown, @)
-    $(document).keyup $.proxy(@procKeyUp, @)
-    @time_points_div.mousedown $.proxy(@procMouseDown, @)
-    @time_points_div.mouseup $.proxy(@procMouseUp, @)
+    $(document).keydown @procKeyDown
+    $(document).keyup @procKeyUp
+    @time_points_div.mousedown @procMouseDown
+    @time_points_div.mouseup @procMouseUp
     @time_points_div.css('width', @video.prop('width') - 147)
     @time_points = []
     @subtitles = []
@@ -103,6 +118,7 @@ class Subdivide
       else
         return false
 
+    time_point.save()
     @time_points.push(time_point)
     @time_points.sort((a,b) -> a.time - b.time)
 
@@ -111,7 +127,7 @@ class Subdivide
     $('.subtitle_edit_box').removeClass('selected')
     div.addClass('selected')
 
-  procKeyDown: (event) ->
+  procKeyDown: (event) =>
     voice_min = '1'.charCodeAt(0)
     voice_max = voice_min + 3
     if event.keyCode == 16 # shift
@@ -119,13 +135,13 @@ class Subdivide
     else if event.keyCode >= voice_min && event.keyCode <= voice_max
       @addTimePoint event.keyCode-voice_min, @video.prop('currentTime'), @shift_pressed
 
-  procKeyUp: (event) ->
+  procKeyUp: (event) =>
     if event.keyCode == 16 # shift
       @shift_pressed = false
 
-  procMouseDown: (event) ->
+  procMouseDown: (event) =>
 
-  procMouseUp: (event) ->
+  procMouseUp: (event) =>
     
 
 $(document).ready(() ->

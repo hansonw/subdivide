@@ -21,32 +21,42 @@ class TimePointsController < ApplicationController
   end
 
   def create
-    @response = []
+    @time_point = TimePoint.new do |tp|
+      tp.time = params[:time]
+      tp.time_point_type = ('true' == params[:time_point_type])
+      tp.voice = params[:voice]
+    end
+    @time_point.save()
     respond_to do |format|
-      format.xml  { render :xml => @response }
-      format.json { render :json => @response }
+      format.xml  { render :xml => @time_point }
+      format.json { render :json => @time_point }
     end
   end
 
   def show
-    @response = []
+    @time_point = TimePoint.find(params[:id])
     respond_to do |format|
       format.html # show.html.slim
-      format.xml  { render :xml => @response }
-      format.json { render :json => @response }
+      format.xml  { render :xml => @time_point }
+      format.json { render :json => @time_point }
     end
   end
 
   def update
-    @response = []
+    @time_point = TimePoint.find(params[:id])
+    @time_point.time = params[:time]
+    @time_point.time_point_type = ('true' == params[:time_point_type])
+    @time_point.voice = params[:voice]
+    @time_point.save()
     respond_to do |format|
-      format.xml  { render :xml => @response }
-      format.json { render :json => @response }
+      format.xml  { render :xml => @time_point }
+      format.json { render :json => @time_point }
     end
   end
 
   def destroy
-    @response = []
+    TimePoint.destroy(params[:id])
+    @response = [:destroy => 'destroy']
     respond_to do |format|
       format.xml  { render :xml => @response }
       format.json { render :json => @response }
