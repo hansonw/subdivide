@@ -1,3 +1,29 @@
 // Place all the styles related to the Subtitles controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#subtitle_view {
+    position: absolute;
+    background: rgba(0,0,0,0.5);
+    width: 640px;
+}
+
+.subtitle {
+    display: none;
+}
+
+.subtitle-track-1 {
+    color: blue;
+}
+
+.subtitle-track-2 {
+    color: red;
+}
+
+.subtitle-track-3 {
+    color: green;
+}
+
+.subtitle-track-4 {
+    color: black;
+}

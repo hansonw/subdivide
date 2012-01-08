@@ -4,6 +4,24 @@ pad = (num, d) ->
     res = '0' + res
   return res
 
+class Cuepoint
+    init: =>
+        document.getElementById('video').addEventListener("timeupdate", @_timeUpdate)
+
+    _timeUpdate: ->
+      console.log this.currentTime
+      used = [false, false, false, false]
+      for subtitle in window.subdivide.subtitles
+        console.log subtitle
+        if subtitle.end_time
+            console.log subtitle.end_time
+            if this.currentTime >= subtitle.start_time.time && this.currentTime <= subtitle.end_time.time
+                $('.subtitle')[subtitle.start_time.voice].innerHTML = subtitle.text
+                console.log subtitle.start_time.voice
+                used[subtitle.start_time.voice] = true
+      for flag,i in used
+        $('.subtitle')[i].style.display = if flag then 'block' else 'none'
+
 class TimePoint
   constructor: (@voice, @time, @type) ->
     @id = -1
@@ -322,5 +340,8 @@ class Subdivide
 $(document).ready(() ->
   $('#video')[0].addEventListener('durationchange', () ->
     window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
-    window.subdivide.init())
+    window.subdivide.init()
+    window.cuepoint = new Cuepoint
+    window.cuepoint.init()
+  )
 )
