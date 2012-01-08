@@ -6,6 +6,7 @@ pad = (num, d) ->
 
 class TimePoint
   constructor: (@voice, @time, @type) ->
+    @id = -1
 
   formatTime: () ->
     h = Math.floor(@time / 3600)
@@ -23,6 +24,9 @@ class TimePoint
     @div = div
     return div
 
+  _onSaveSuccess: (data) =>
+    @id = data['id']
+
   save: =>
     data = {
         voice: @voice,
@@ -31,11 +35,9 @@ class TimePoint
     }
     jQuery.ajax({
         type: 'POST',
-        url: '/time_points.json',
+        url: location.pathname + '/time_points.json',
         data: data,
-        succcess: (data) ->
-          console.log data
-          console.log data[id]
+        success: @_onSaveSuccess
     })
 
 class Subtitle
