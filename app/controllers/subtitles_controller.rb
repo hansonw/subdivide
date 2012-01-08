@@ -27,7 +27,7 @@ class SubtitlesController < ApplicationController
     end
     @subtitle.save()
     data = {:type => 'create_subtitle', :value => @subtitle}
-    Juggernaut.publish("channel1", data)
+    Juggernaut.publish(@subtitle.time_point.video.uuid, data)
     respond_to do |format|
       format.xml  { render :xml => @subtitle }
       format.json { render :json => @subtitle }
@@ -48,7 +48,7 @@ class SubtitlesController < ApplicationController
     @subtitle.text = params[:text]
     @subtitle.save()
     data = {:type => 'update_subtitle', :value => @subtitle}
-    Juggernaut.publish("channel1", data)
+    Juggernaut.publish(@subtitle.time_point.video.uuid, data)
     respond_to do |format|
       format.xml  { render :xml => @subtitle }
       format.json { render :json => @subtitle }
