@@ -20,7 +20,14 @@
 }
 
 #time_points {
-  padding-top: 10px;
+  position: relative;
+  margin-left: 40px;
   clear: both;
 }
 
+.slider {
+  background: blue;
+  position: absolute;
+  height: 10px;
+  width: 1px;
+}
