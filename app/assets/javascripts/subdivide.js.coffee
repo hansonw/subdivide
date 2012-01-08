@@ -1,6 +1,21 @@
 class TimePoint
   constructor: (@voice, @time, @type) ->
 
+  save: =>
+    data = {
+        voice: @voice,
+        time: @time,
+        time_point_type: @type
+    }
+    jQuery.ajax({
+        type: 'POST',
+        url: '/time_points.json',
+        data: data,
+        succcess: (data) ->
+          console.log data
+          console.log data[id]
+    })
+
 class Subtitle
   constructor: (@time_point, @text) ->
 
@@ -46,6 +61,7 @@ class Subdivide
       else
         return false
 
+    time_point.save()
     @time_points.push(time_point)
     @time_points.sort((a,b) -> a.time - b.time)
     console.log(@time_points)

@@ -23,7 +23,7 @@ class TimePointsController < ApplicationController
   def create
     @time_point = TimePoint.new do |tp|
       tp.time = params[:time]
-      tp.type = params[:type]
+      tp.time_point_type = ('true' == params[:time_point_type])
       tp.voice = params[:voice]
     end
     @time_point.save()
@@ -45,7 +45,7 @@ class TimePointsController < ApplicationController
   def update
     @time_point = TimePoint.find(params[:id])
     @time_point.time = params[:time]
-    @time_point.type = params[:type]
+    @time_point.time_point_type = ('true' == params[:time_point_type])
     @time_point.voice = params[:voice]
     @time_point.save()
     respond_to do |format|
