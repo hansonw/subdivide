@@ -28,6 +28,8 @@ class TimePointsController < ApplicationController
       tp.voice = params[:voice]
     end
     @time_point.save()
+    Juggernaut.publish("channel1", "time_points: CREATE")
+    Juggernaut.publish("channel1", @time_point)
     respond_to do |format|
       format.xml  { render :xml => @time_point }
       format.json { render :json => @time_point }

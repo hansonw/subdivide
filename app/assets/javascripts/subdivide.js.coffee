@@ -156,8 +156,21 @@ class Subdivide
   procMouseDown: (event) =>
 
   procMouseUp: (event) =>
-    
+
+  @initJug: ->
+    window.jug = new Juggernaut({
+      secure: false,
+      host: 'simple-earth-9425.herokuapp.com',
+      port: 80,
+      transports: ['xhr-polling', 'jsonp-polling']
+    })
+    jug.subscribe("channel1", (data) ->
+        console.log("Got data:")
+        console.log(data)
+      )
+
 
 $(document).ready(() ->
-  new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
+  window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
+  Subdivide.initJug()
 )
