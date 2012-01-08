@@ -17,6 +17,8 @@
 #subtitle_edit {
   float: right;
   width: 360px;
+  height: 360px;
+  overflow-y: scroll;
 }
 
 #time_points {
@@ -26,8 +28,22 @@
 }
 
 .slider {
-  background: blue;
   position: absolute;
   height: 10px;
   width: 1px;
+}
+
+.subtitle_edit_box {
+  margin-top: 5px;
+  width: 100%;
+}
+
+.startTime {
+}
+
+.voice {
+}
+
+.selected {
+  background: yellow;
 }
