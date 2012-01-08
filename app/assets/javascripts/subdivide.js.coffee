@@ -41,13 +41,9 @@ class TimePoint
 class Subtitle
   constructor: (@time_point, @text) ->
 
-  handleClick: (event) ->
-    if this.innerHTML == 'Enter text here..'
-      this.innerHTML = ''
-
   handleKeypress: (event) ->
     if event.keyCode == 13  # return
-      event.currentTarget.lastChild.blur()
+      @blur()
 
   createDiv: (div_container) ->
     div = $('<div />')
@@ -58,9 +54,8 @@ class Subtitle
                            .append('Voice ' + (@time_point.voice+1) + ':'))
     div.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
-                           .append('Enter text here..')
-                           .click(@handleClick))
-                           .keypress(@handleKeypress)
+                           .append('..')
+                           .keypress(@handleKeypress))
     @div = div
     return div
 
