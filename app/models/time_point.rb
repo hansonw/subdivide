@@ -4,6 +4,7 @@ class TimePoint < ActiveRecord::Base
 
   validates :time, :presence => true
   validate :end_must_follow_start, :tp_must_not_preceed_end, :unique, :on => :create
+  validate :cannot_violate_ordering, :on => :update
 
   def end_must_follow_start
     if time_point_type == 1
@@ -37,6 +38,24 @@ class TimePoint < ActiveRecord::Base
                   .where(:voice => voice, :video_id => video_id)
     if tp.length() > 0
       errors.add(:time_point_type, 'duplicate time point')
+    end
+  end
+
+  def cannot_violate_ordering
+    cur_time = TimePoint.where(:id => id).first.time.to_f
+    next_tp = TimePoint.where(['cast(time as double precision) >= ?', cur_time])
+                       .where(:voice => voice, :video_id => video_id)
+                       .where(['id != ?', id])
+                       .order('time')
+                       .first;
+    prev_tp = TimePoint.where(['cast(time as double precision) <= ?', cur_time])
+                       .where(:voice => voice, :video_id => video_id)
+                       .where(['id != ?', id])
+                       .order('time')
+                       .last;
+    if (next_tp.nil? == false && time.to_f >= next_tp.time.to_f) ||
+       (prev_tp.nil? == false && time.to_f <= prev_tp.time.to_f)
+      errors.add(:time, 'violates time point ordering')
     end
   end
 end

@@ -26,7 +26,7 @@ class TimePointsController < ApplicationController
     @time_point = TimePoint.new do |tp|
       tp.video_id = params[:video_id]
       tp.time = time
-      tp.time_point_type = ('true' == params[:time_point_type])
+      tp.time_point_type = params[:time_point_type].to_i
       tp.voice = voice
     end
 
@@ -56,11 +56,12 @@ class TimePointsController < ApplicationController
   def update
     @time_point = TimePoint.find(params[:id])
     @time_point.time = params[:time]
-    @time_point.time_point_type = ('true' == params[:time_point_type])
+    @time_point.time_point_type = params[:time_point_type].to_i
     @time_point.voice = params[:voice]
-    @time_point.save()
-    data = {:type => 'update_time_point', :value => @time_point}
-    Juggernaut.publish(@time_point.video.uuid, data)
+    if @time_point.save()
+      data = {:type => 'update_time_point', :value => @time_point}
+      Juggernaut.publish(@time_point.video.uuid, data)
+    end
     respond_to do |format|
       format.xml  { render :xml => @time_point }
       format.json { render :json => @time_point }

@@ -101,7 +101,7 @@ class Subtitle
           else @start_time.formatTime()
       else
         if @end_time == null
-          @end_time = new TimePoint(@start_time.voice, new_time, true)
+          @end_time = new TimePoint(@start_time.voice, new_time, 1)
           @end_time.create()
         else
           @end_time.time = new_time
@@ -267,7 +267,7 @@ class Subdivide
     if event.keyCode == 16 # shift
       @shift_pressed = true
     else if event.keyCode >= voice_min && event.keyCode <= voice_max
-      @addTimePoint event.keyCode-voice_min, @video.prop('currentTime'), @shift_pressed
+      @addTimePoint event.keyCode-voice_min, @video.prop('currentTime'), if @shift_pressed then 1 else 0
 
   procKeyUp: (event) =>
     if event.keyCode == 16 # shift
