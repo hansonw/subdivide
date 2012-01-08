@@ -58,9 +58,10 @@ class TimePointsController < ApplicationController
     @time_point.time = params[:time]
     @time_point.time_point_type = ('true' == params[:time_point_type])
     @time_point.voice = params[:voice]
-    @time_point.save()
-    data = {:type => 'update_time_point', :value => @time_point}
-    Juggernaut.publish("channel1", data)
+    if @time_point.save()
+      data = {:type => 'update_time_point', :value => @time_point}
+      Juggernaut.publish("channel1", data)
+    end
     respond_to do |format|
       format.xml  { render :xml => @time_point }
       format.json { render :json => @time_point }
