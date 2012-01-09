@@ -10,7 +10,7 @@ class TimePoint < ActiveRecord::Base
     if time_point_type == 1
       prev_tp = TimePoint.where(['cast(time as double precision) <= ?', time.to_f])
                          .where(id.nil? ? '1 = 1' : ['id != ?', id])
-                         .order('time')
+                         .order('cast(time as double precision)')
                          .last(:conditions => {:voice => voice, :video_id => video_id})
       y 'prev'
       y prev_tp
@@ -23,7 +23,7 @@ class TimePoint < ActiveRecord::Base
   def tp_must_not_preceed_end
     next_tp = TimePoint.where(['cast(time as double precision) >= ?', time.to_f])
                        .where(id.nil? ? '1 = 1' : ['id != ?', id])
-                       .order('time')
+                       .order('cast(time as double precision)')
                        .first(:conditions => {:voice => voice, :video_id => video_id})
     y 'next'
     y next_tp
