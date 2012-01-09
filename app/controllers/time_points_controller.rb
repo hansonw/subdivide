@@ -46,6 +46,7 @@ class TimePointsController < ApplicationController
 
   def show
     @time_point = TimePoint.find(params[:id])
+    @time_point.sort! { |a,b| a.time.to_f <=> b.time.to_f }
     respond_to do |format|
       format.html # show.html.slim
       format.xml  { render :xml => @time_point }
