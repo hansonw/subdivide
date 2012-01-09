@@ -9,15 +9,16 @@ class Cuepoint
         document.getElementById('video').addEventListener("timeupdate", @_timeUpdate)
 
     _timeUpdate: ->
-      console.log this.currentTime
       used = [false, false, false, false]
+      first = true
       for subtitle in window.subdivide.subtitles
-        console.log subtitle
         if subtitle.end_time
-            console.log subtitle.end_time
             if this.currentTime >= subtitle.start_time.time && this.currentTime <= subtitle.end_time.time
+                if first == true
+                  if !subtitle.div.hasClass('selected')
+                    window.subdivide.selectActiveSubtitle(subtitle)
+                  first = false
                 $('.subtitle')[subtitle.start_time.voice].innerHTML = subtitle.text
-                console.log subtitle.start_time.voice
                 used[subtitle.start_time.voice] = true
       for flag,i in used
         $('.subtitle')[i].style.display = if flag then 'block' else 'none'
@@ -303,11 +304,14 @@ class Subdivide
       (sub for sub in @subtitles when sub.id != id)
 
   setActiveSubtitle: (sub) ->
+    @selectActiveSubtitle(sub)
+    @video.prop('currentTime', sub.start_time.time)
+
+  selectActiveSubtitle: (sub) ->
     div = sub.div
     @subtitle_edit_div.scrollTop(div.position().top + @subtitle_edit_div.scrollTop())
     $('.subtitle_edit_box').removeClass('selected')
     div.addClass('selected')
-    @video.prop('currentTime', sub.start_time.time)
   
   procKeyDown: (event) =>
     voice_min = '1'.charCodeAt(0)
