@@ -56,7 +56,12 @@ class SubtitlesController < ApplicationController
   end
 
   def destroy
-    Subtitle.destroy(params[:id])
+    @subtitle = Subtitle.find(params[:id])
+    if @subtitle.nil? == false
+      Subtitle.destroy(params[:id])
+      data = {:type => 'delete_subtitle', :value => params[:id]}
+      Juggernaut.publish(@subtitle.time_point.video.uuid, data)
+    end
     @response = [:destroy => 'destroy']
     respond_to do |format|
       format.xml  { render :xml => @response }

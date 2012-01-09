@@ -72,7 +72,12 @@ class TimePointsController < ApplicationController
   end
 
   def destroy
-    TimePoint.destroy(params[:id])
+    @time_point = TimePoint.find(params[:id])
+    if @time_point.nil? == false
+      TimePoint.destroy(params[:id])
+      data = {:type => 'delete_time_point', :value => params[:id]}
+      Juggernaut.publish(@time_point.video.uuid, data)
+    end
     @response = [:destroy => 'destroy']
     respond_to do |format|
       format.xml  { render :xml => @response }

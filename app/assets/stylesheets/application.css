@@ -45,6 +45,10 @@
 .voice {
 }
 
+.delete {
+  float: right;
+}
+
 .selected {
   background: yellow;
 }

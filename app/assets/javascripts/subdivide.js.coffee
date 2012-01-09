@@ -91,6 +91,13 @@ class TimePoint
         success: @_onUpdateSuccess
     })
 
+  delete: =>
+    if @div then @div.remove()
+    jQuery.ajax({
+        type: 'DELETE',
+        url: location.pathname + '/time_points/' + @id + '.json',
+    })
+
 class Subtitle
   constructor: (@start_time, @text) ->
     @id = -1
@@ -128,6 +135,12 @@ class Subtitle
     @text = event.currentTarget.innerHTML
     @update()
 
+  handleDelete: =>
+    @delete()
+    @start_time.delete()
+    if @end_time
+      @end_time.delete()
+
   createDiv: ->
     div = $('<div />')
     div.addClass('subtitle_edit_box')
@@ -143,6 +156,9 @@ class Subtitle
                                     else @start_time.formatTime())
                             .keydown(@handleKeydown)
                             .blur(@handleEndTimeEdit))
+    div.append($('<div />').addClass('delete')
+                           .append($('<a href="#"/>').append('x'))
+                           .click(@handleDelete))
     div.append($('<div />').addClass('voice')
                            .append('Voice ' + (@start_time.voice+1) + ':'))
     div.append($('<div />').addClass('subtitleText')
@@ -182,6 +198,13 @@ class Subtitle
         url: location.pathname + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
         data: data,
         success: @_onUpdateSuccess
+    })
+
+  delete: =>
+    if @div then @div.remove()
+    jQuery.ajax({
+        type: 'DELETE',
+        url: location.pathname + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
     })
 
 class Subdivide
@@ -271,6 +294,14 @@ class Subdivide
         pt.time = json.time
     @updateTimePointDivs()
 
+  procDeleteTimePoint: (id) ->
+    @time_points =
+      (pt for pt in @time_points when pt.id != id)
+
+  procDeleteSubtitle: (id) ->
+    @subtitles =
+      (sub for sub in @subtitles when sub.id != id)
+
   setActiveSubtitle: (sub) ->
     div = sub.div
     @subtitle_edit_div.scrollTop(div.position().top + @subtitle_edit_div.scrollTop())
@@ -311,6 +342,10 @@ class Subdivide
         @procAddSubtitle(data.value)
       else if data.type == 'create_time_point'
         @procAddTimePoint(data.value)
+      else if data.type == 'delete_time_point'
+        @procDeleteTimePoint(data.value)
+      else if data.type == 'delete_subtitle'
+        @procDeleteSubtitle(data.value)
       else
         console.log('Unknown type ' + data.type)
     )
