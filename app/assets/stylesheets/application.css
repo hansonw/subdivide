@@ -6,49 +6,167 @@
  *= require_tree . 
 */
 
+body {
+  font-family: Helvetica Neue, Helvetica, Arial;
+  margin: 0;
+  padding: 0;
+  background: #eee;
+  color: #333;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 36px;
+  text-shadow: #555 1px 1px 0px;
+  display: inline;
+}
+
+h2 {
+  margin: 0;
+  padding: 0 0 10px 0;
+}
+
+.menu {
+  padding-left: 25px;
+}
+
+#header {
+  padding-top: 25px;
+  padding-bottom: 25px;
+  /* border-bottom: 2px solid #aaa; */
+}
+
 #container {
   width: 1024px;
+  padding-left: 30px;
+  margin: 0 auto;
 }
 
 #video {
   float: left;
 }
 
-#subtitle_edit {
+#sidebar {
   position: relative;
   float: right;
+}
+
+#content {
+  position: relative;
+}
+
+#subtitle_edit {
+  font-size: 14px;
   width: 360px;
   height: 360px;
   overflow-y: scroll;
 }
 
+.subtitle-title {
+  position: absolute;
+  top: -28px;
+  width: 100%;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #aaa;
+}
+
 #time_points {
   position: relative;
+  padding-top: 8px;
   margin-left: 40px;
   clear: both;
 }
 
 .slider {
   position: absolute;
+  background: #333;
   height: 10px;
   width: 1px;
+  cursor: pointer;
+  border-radius: 2px;
 }
 
 .subtitle_edit_box {
-  margin-top: 5px;
+  padding: 5px 0 5px 0;
   width: 100%;
+  border-bottom: 1px solid #ccc;
 }
 
-.startTime {
+.subtitle_edit_box:last-child {
+  border-bottom: 0;
+}
+
+.time-points {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  margin-bottom: 2px;
+  font-size: 12px;
+  border-radius: 2px;
+  box-shadow: 0px 0px 1px black;
+}
+
+.time-points-1 {
+  background: white;
+}
+.time-points-2 {
+  background: #ffff80;
+}
+.time-points-3 {
+  background: #bcddeb;
+}
+.time-points-4 {
+  background: #ff8080;
+}
+
+.label {
+  position: absolute;
+  left: -10px;
+}
+
+.startTime:hover,
+.endTime:hover,
+.subtitleText:hover {
+  background: #ccc;
+  cursor: edit;
+}
+
+.startTime,
+.endTime {
+  font-size: 12px;
+  color: #777;
 }
 
 .voice {
+  float: left;
+  padding: 5px 5px 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.subtitle_data {
+  padding-left: 25px;
+}
+
+.subtitleText {
+  padding-right: 5px;
 }
 
 .delete {
   float: right;
+  padding-right: 5px;
+}
+
+.delete a {
+  color: #333;
+  text-decoration: none;
+}
+
+.delete a:hover {
+  color: #777;
 }
 
 .selected {
-  background: yellow;
+  background: #fef087;
 }

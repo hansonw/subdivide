@@ -56,12 +56,11 @@ class TimePoint
     ms = Math.floor((@time - Math.floor(@time)) * 1000)
     return h + ':' + pad(m, 2) + ':' + pad(s, 2) + '.' + pad(ms, 3)
 
-  createDiv: (color, pos) ->
+  createDiv: (pos) ->
     div = $('<div />')
     div.addClass('slider')
     div.css('left', pos)
-    div.css('top', 10 + @voice * 15)
-    div.css('background', color)
+    div.css('top', 10 + @voice * 16)
     @div = div
     return div
 
@@ -152,28 +151,30 @@ class Subtitle
   createDiv: ->
     div = $('<div />')
     div.addClass('subtitle_edit_box')
-    div.append($('<span />').addClass('startTime')
+    div.append($('<div />').addClass('voice')
+                           .append(@start_time.voice+1))
+    dat = $('<div />').addClass('subtitle_data')
+    dat.append($('<span />').addClass('startTime')
                             .prop('contenteditable', true)
                             .append(@start_time.formatTime())
                             .keydown(@handleKeydown)
                             .blur(@handleStartTimeEdit))
-    div.append(' - ')
-    div.append($('<span />').addClass('endTime')
+    dat.append(' - ')
+    dat.append($('<span />').addClass('endTime')
                             .prop('contenteditable', true)
                             .append(if @end_time then @end_time.formatTime() \
                                     else '?')
                             .keydown(@handleKeydown)
                             .blur(@handleEndTimeEdit))
-    div.append($('<div />').addClass('delete')
-                           .append($('<a href="#"/>').append('x'))
+    dat.append($('<div />').addClass('delete')
+                           .append($('<a href="#"/>').append('&times;'))
                            .click(@handleDelete))
-    div.append($('<div />').addClass('voice')
-                           .append('Voice ' + (@start_time.voice+1) + ':'))
-    div.append($('<div />').addClass('subtitleText')
+    dat.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
                            .append(@text)
                            .keydown(@handleKeydown)
                            .blur(@handleTextEdit))
+    div.append(dat);
     @div = div
     return div
 
@@ -226,7 +227,6 @@ class Subdivide
     @time_points = []
     @subtitles = []
     @shift_pressed = false
-    @colors = ['blue', 'red', 'green', 'black']
 
   init: =>
     @loadTimePoints()
@@ -242,7 +242,7 @@ class Subdivide
         prevVoice[pt.voice] = pt
         if pt.div == null
           @time_points_div.append(
-            pt.createDiv(@colors[pt.voice], @timeToWidth(pt.time)))
+            pt.createDiv(@timeToWidth(pt.time)))
         else
           # in case anything was updated
           pt.div.css('left', @timeToWidth(pt.time))

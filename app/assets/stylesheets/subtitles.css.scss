@@ -2,28 +2,39 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+#subtitle_container {
+  position: absolute;
+  vertical-align: bottom;
+  top: 0px;
+  padding: 0; margin: 0;
+  width: 640px;
+  height: 328px;
+}
+
 #subtitle_view {
-    position: absolute;
-    background: rgba(0,0,0,0.5);
-    width: 640px;
+  position: absolute;
+  bottom: 0;
 }
 
 .subtitle {
-    display: none;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  width: 640px;
+  text-align: center;
 }
 
 .subtitle-track-1 {
-    color: blue;
+  color: white;
 }
 
 .subtitle-track-2 {
-    color: red;
+  color: yellow;
 }
 
 .subtitle-track-3 {
-    color: green;
+  color: skyblue;
 }
 
 .subtitle-track-4 {
-    color: black;
+  color: orange;
 }

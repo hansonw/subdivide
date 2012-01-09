@@ -1,20 +1,41 @@
-h1 Subdivide
-
 javascript:
   function get_channel_name() {
     return '#{@video.uuid}';
   }
 
-div id="container"
-  video id="video" controls="controls" width=640 height=360
-    source src==@video.url
 
-  div id="subtitle_edit"
+div id="container
+  div id="header"
+    h1
+      sub
+        font color="orange" sub
+      font color="red" Divide
+    span.menu Browse | Upload
 
-  div id="subtitle_view"
-    div.subtitle.subtitle-track-1 &nbsp;
-    div.subtitle.subtitle-track-2 &nbsp;
-    div.subtitle.subtitle-track-3 &nbsp;
-    div.subtitle.subtitle-track-4 &nbsp;
+  h2 What is Machine Learning?
 
-  div id="time_points"
+  div id="content"
+
+    div id="subtitle_container"
+      div id="subtitle_view"
+        div.subtitle.subtitle-track-1 &nbsp;
+        div.subtitle.subtitle-track-2 &nbsp;
+        div.subtitle.subtitle-track-3 &nbsp;
+        div.subtitle.subtitle-track-4 &nbsp;
+
+    video id="video" controls="controls" width=640 height=360
+      source src==@video.url
+
+    div id="sidebar"
+      span.subtitle-title Subtitles
+      div id="subtitle_edit"
+
+    div id="time_points"
+      div.time-points.time-points-1
+        div.label 1
+      div.time-points.time-points-2
+        div.label 2
+      div.time-points.time-points-3
+        div.label 3
+      div.time-points.time-points-4
+        div.label 4
