@@ -5,23 +5,30 @@ pad = (num, d) ->
   return res
 
 class Cuepoint
-    init: =>
-        document.getElementById('video').addEventListener("timeupdate", @_timeUpdate)
+  constructor: (@video) ->
+    @last_active = {}
+    @video[0].addEventListener("timeupdate", @_timeUpdate)
 
-    _timeUpdate: ->
-      used = [false, false, false, false]
-      first = true
-      for subtitle in window.subdivide.subtitles
-        if subtitle.end_time
-            if this.currentTime >= subtitle.start_time.time && this.currentTime <= subtitle.end_time.time
-                if first == true
-                  if !subtitle.div.hasClass('selected')
-                    window.subdivide.selectActiveSubtitle(subtitle)
-                  first = false
-                $('.subtitle')[subtitle.start_time.voice].innerHTML = subtitle.text
-                used[subtitle.start_time.voice] = true
-      for flag,i in used
-        $('.subtitle')[i].style.display = if flag then 'block' else 'none'
+  _timeUpdate: =>
+    @updateSubtitleDisplay()
+
+  updateSubtitleDisplay: =>
+    used = [false, false, false, false]
+    active = {}
+    first = true
+    currentTime = @video.prop('currentTime')
+    for subtitle in window.subdivide.subtitles
+      if !subtitle.end_time || currentTime <= subtitle.end_time.time
+        if currentTime >= subtitle.start_time.time
+          if first == true && !@last_active[subtitle.id]
+            window.subdivide.selectActiveSubtitle(subtitle)
+            first = false
+          active[subtitle.id] = 1
+          $('.subtitle')[subtitle.start_time.voice].innerHTML = subtitle.text
+          used[subtitle.start_time.voice] = true
+    for flag,i in used
+      $('.subtitle')[i].style.display = if flag then 'block' else 'none'
+    @last_active = active
 
 class TimePoint
   constructor: (@voice, @time, @type) ->
@@ -61,7 +68,7 @@ class TimePoint
   _onCreateSuccess: (data) =>
     @id = data['id']
     if !@type
-      sub = new Subtitle(@, '')
+      sub = new Subtitle(@, 'speech')
       sub.create()
 
   _onUpdateSuccess: (data) =>
@@ -123,7 +130,7 @@ class Subtitle
     if new_time == null || new_time <= @start_time.time
       event.currentTarget.innerHTML =
         if @end_time then @end_time.formatTime() \
-        else @start_time.formatTime()
+        else '?'
     else
       if @end_time == null
         @end_time = new TimePoint(@start_time.voice, new_time, 1)
@@ -154,7 +161,7 @@ class Subtitle
     div.append($('<span />').addClass('endTime')
                             .prop('contenteditable', true)
                             .append(if @end_time then @end_time.formatTime() \
-                                    else @start_time.formatTime())
+                                    else '?')
                             .keydown(@handleKeydown)
                             .blur(@handleEndTimeEdit))
     div.append($('<div />').addClass('delete')
@@ -164,7 +171,7 @@ class Subtitle
                            .append('Voice ' + (@start_time.voice+1) + ':'))
     div.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
-                           .append('..')
+                           .append(@text)
                            .keydown(@handleKeydown)
                            .blur(@handleTextEdit))
     @div = div
@@ -296,12 +303,14 @@ class Subdivide
     @updateTimePointDivs()
 
   procDeleteTimePoint: (id) ->
-    @time_points =
-      (pt for pt in @time_points when pt.id != id)
+    id = parseInt(id)
+    @time_points = (pt for pt in @time_points when pt.id != id)
 
   procDeleteSubtitle: (id) ->
-    @subtitles =
-      (sub for sub in @subtitles when sub.id != id)
+    id = parseInt(id)
+    console.log(@subtitles)
+    console.log(id)
+    @subtitles = (sub for sub in @subtitles when sub.id != id)
 
   setActiveSubtitle: (sub) ->
     @selectActiveSubtitle(sub)
@@ -352,6 +361,7 @@ class Subdivide
         @procDeleteSubtitle(data.value)
       else
         console.log('Unknown type ' + data.type)
+      window.cuepoint.updateSubtitleDisplay()
     )
   
   loadTimePoints: =>
@@ -380,7 +390,6 @@ $(document).ready(() ->
   $('#video')[0].addEventListener('durationchange', () ->
     window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
     window.subdivide.init()
-    window.cuepoint = new Cuepoint
-    window.cuepoint.init()
+    window.cuepoint = new Cuepoint $('#video')
   )
 )
