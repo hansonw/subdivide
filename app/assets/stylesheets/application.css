@@ -94,7 +94,7 @@ h3 {
 
 .time-marker {
   position: absolute;
-  background: #999;
+  background: rgba(0, 0, 0, 0.3);
   height: 64px;
   width: 1px;
   z-index: 999;
@@ -131,6 +131,13 @@ h3 {
 }
 .time-points-4 {
   background: #ff8080;
+}
+
+.controls {
+  text-size: 12px;
+  position: absolute;
+  right: -60px;
+  cursor: pointer;
 }
 
 .label {

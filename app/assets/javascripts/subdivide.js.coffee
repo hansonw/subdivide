@@ -232,6 +232,11 @@ class Subdivide
     @time_points = []
     @subtitles = []
     @shift_pressed = false
+    for i in [1..4]
+      $('.controls-'+i+' .start').click({voice: i-1, type: 0},
+        (e) => @procControl(e))
+      $('.controls-'+i+' .stop').click({voice: i-1, type: 1},
+        (e) => @procControl(e))
 
   init: =>
     @loadTimePoints()
@@ -338,6 +343,10 @@ class Subdivide
   procKeyUp: (event) =>
     if event.keyCode == 16 # shift
       @shift_pressed = false
+
+  procControl: (event) =>
+    @addTimePoint(event.data.voice, @video.prop('currentTime'),
+                   event.data.type)
 
   procMouseDown: (event) =>
 

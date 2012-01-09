@@ -32,14 +32,13 @@ div id="container
 
     div id="time_points"
       div.time-marker id="time_marker" &nbsp;
-      div.time-points.time-points-1
-        div.label 1
-      div.time-points.time-points-2
-        div.label 2
-      div.time-points.time-points-3
-        div.label 3
-      div.time-points.time-points-4
-        div.label 4
+      - for i in 1..4 do
+        div.time-points{class="#{'time-points-'+i.to_s}"}
+          div.label #{i}
+          div.controls{class="#{'controls-'+i.to_s}"}
+            span.start start
+            | &nbsp;
+            span.stop stop
 
     div id="help"
       h3 How do I use this?
