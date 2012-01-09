@@ -5,12 +5,13 @@ pad = (num, d) ->
   return res
 
 class Cuepoint
-  constructor: (@video) ->
+  constructor: (@video, @marker) ->
     @last_active = {}
     @video[0].addEventListener("timeupdate", @_timeUpdate)
 
   _timeUpdate: =>
     @updateSubtitleDisplay()
+    @updateTimeMarker()
 
   updateSubtitleDisplay: =>
     used = [false, false, false, false]
@@ -29,6 +30,10 @@ class Cuepoint
     for flag,i in used
       $('.subtitle')[i].style.display = if flag then 'block' else 'none'
     @last_active = active
+
+  updateTimeMarker: =>
+    @marker.css('left',
+      window.subdivide.timeToWidth(@video.prop('currentTime')))
 
 class TimePoint
   constructor: (@voice, @time, @type) ->
@@ -390,6 +395,7 @@ $(document).ready(() ->
   $('#video')[0].addEventListener('durationchange', () ->
     window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
     window.subdivide.init()
-    window.cuepoint = new Cuepoint $('#video')
+    window.cuepoint = new Cuepoint $('#video'), $('#time_marker')
   )
+  $('#help_close').click(-> $('#help').css('display', 'none'))
 )
