@@ -4,7 +4,7 @@ Subdivide::Application.routes.draw do
       resources :subtitles
     end
   end
-  root :to => 'videos#index'
+  root :to => 'splash#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

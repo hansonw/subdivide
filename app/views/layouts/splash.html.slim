@@ -5,6 +5,11 @@ html
     == stylesheet_link_tag "application"
     == javascript_include_tag "application"
     script src="http://simple-earth-9425.herokuapp.com/application.js" type="text/javascript" charset="utf-8"
+    meta property="og:title" content="subdivide"
+    meta property="og:type" content="website"
+    meta property="og:image" content=="#{asset_path('logo.png')}"
+    meta property="og:url" content="http://subdivide.iterate.ca/"
+    meta property="fb:admins" content="1656720607"
     == csrf_meta_tags
   body
     == yield
