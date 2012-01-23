@@ -5,13 +5,12 @@ pad = (num, d) ->
   return res
 
 class Cuepoint
-  constructor: (@video, @marker) ->
+  constructor: (@video) ->
     @last_active = {}
-    @video[0].addEventListener("timeupdate", @_timeUpdate)
+    @video.bind("timeupdate", @_timeUpdate)
 
   _timeUpdate: =>
     @updateSubtitleDisplay()
-    @updateTimeMarker()
 
   updateSubtitleDisplay: =>
     used = [false, false, false, false]
@@ -30,10 +29,6 @@ class Cuepoint
     for flag,i in used
       $('.subtitle')[i].style.display = if flag then 'block' else 'none'
     @last_active = active
-
-  updateTimeMarker: =>
-    @marker.css('left',
-      window.subdivide.timeToWidth(@video.prop('currentTime')))
 
 class TimePoint
   constructor: (@voice, @time, @type) ->
@@ -65,7 +60,7 @@ class TimePoint
     div = $('<div />')
     div.addClass('slider')
     div.css('left', pos)
-    div.css('top', 10 + @voice * 16)
+    div.css('top', 2 + @voice * 16)
     @div = div
     return div
 
@@ -222,13 +217,21 @@ class Subtitle
     })
 
 class Subdivide
-  constructor: (@video, @time_points_div, @subtitle_edit_div) ->
+  constructor: (@video, @time_points_div, @time_marker, @subtitle_edit_div, @scrollbar) ->
     $(document).keydown @procKeyDown
     $(document).keyup @procKeyUp
-    @time_points_div.mouseover
-    @time_points_div.mousedown @procMouseDown
-    @time_points_div.mouseup @procMouseUp
-    @time_points_div.css('width', @video.prop('width') - 147)
+    @barWidth = @video.prop('width') - 147
+    @zoomWidth = @barWidth + 1
+    @zoomLevel = 0
+    @time_points_div.css('width', @barWidth)
+    @scrollbar.css('width', @barWidth)
+    @scrollbar.jScrollPane({
+      contentWidth: @barWidth+1,
+    })
+    @scrollbar.bind('jsp-scroll-x', @procScroll)
+    $('.zoomin').click({dir: 1}, @procZoom)
+    $('.zoomout').click({dir: -1}, @procZoom)
+    @video.bind('timeupdate', @procTimeUpdate)
     @time_points = []
     @subtitles = []
     @shift_pressed = false
@@ -242,8 +245,9 @@ class Subdivide
     @loadTimePoints()
     @initJug()
 
-  timeToWidth: (time) ->
-    Math.ceil(time / @video.prop('duration') * @time_points_div.width())
+  timeToPos: (time) ->
+    return Math.ceil(time / @video.prop('duration') * @zoomWidth) -
+      @scrollbar.data('jsp').getContentPositionX()
 
   updateTimePointDivs: ->
     prevVoice = {}
@@ -251,18 +255,21 @@ class Subdivide
       if !pt.type
         prevVoice[pt.voice] = pt
         if pt.div == null
-          @time_points_div.append(
-            pt.createDiv(@timeToWidth(pt.time)))
+          $('.slider-box', @time_points_div).append(
+            pt.createDiv(@timeToPos(pt.time)))
         else
           # in case anything was updated
-          pt.div.css('left', @timeToWidth(pt.time))
+          pt.div.css('left', @timeToPos(pt.time))
       else if prevVoice[pt.voice]
         prev = prevVoice[pt.voice]
         prev.end = pt
-        prev.div.css('width', @timeToWidth(pt.time - prev.time))
+        prev.div.css('width', @timeToPos(pt.time) - @timeToPos(prev.time))
         if prev.sub
           prev.sub.end_time = pt
           prev.sub.updateTimes()
+
+  updateTimeMarker: =>
+    @time_marker.css('left', @timeToPos(@video.prop('currentTime')))
 
   createSubtitleDivs: ->
     prev = null
@@ -352,6 +359,37 @@ class Subdivide
 
   procMouseUp: (event) =>
 
+  procZoom: (event) =>
+    dir = event.data.dir
+    if dir == 1 || (dir == -1 && @zoomLevel > 0)
+      @zoomLevel += dir
+      @zoomWidth = @barWidth * (1 + @zoomLevel) + 1
+      pct = @scrollbar.data('jsp').getContentPositionX() / @zoomWidth
+      @scrollbar.data('jsp').scrollToX(0)
+      @scrollbar.data('jsp').reinitialise({contentWidth: @zoomWidth})
+      pct = Math.min(pct, 1 - 1/(1 + @zoomLevel))
+      @scrollbar.data('jsp').scrollToX(pct * @zoomWidth)
+
+  procScroll: (event) =>
+    @updateTimePointDivs()
+    @updateTimeMarker()
+
+  procTimeUpdate: (event) =>
+    @updateTimeMarker()
+    # Keep the marker within 20px of the slider bounds.
+    bound = 20
+    cur_pos = @scrollbar.data('jsp').getContentPositionX()
+    cur_end = cur_pos + @barWidth
+    mark_pos = parseInt(@time_marker.css('left'))
+    diff = 0
+    if mark_pos < bound && cur_pos > 0
+      diff = bound - mark_pos
+      @scrollbar.data('jsp').scrollToX(Math.max(0, cur_pos - diff))
+    else if mark_pos > @barWidth - bound && cur_end < @zoomWidth
+      diff = mark_pos - (@barWidth - bound)
+      @scrollbar.data('jsp').scrollToX(
+        Math.min(@zoomWidth - @barWidth, cur_pos + diff))
+
   initJug: =>
     window.jug = new Juggernaut({
       secure: false,
@@ -402,9 +440,9 @@ class Subdivide
 
 $(document).ready(() ->
   $('#video')[0].addEventListener('durationchange', () ->
-    window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#subtitle_edit')
+    window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#time_marker'), $('#subtitle_edit'), $('#scrollbar')
     window.subdivide.init()
-    window.cuepoint = new Cuepoint $('#video'), $('#time_marker')
+    window.cuepoint = new Cuepoint $('#video')
   )
   $('#help_close').click(-> $('#help').css('display', 'none'))
 )

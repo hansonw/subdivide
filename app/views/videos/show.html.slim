@@ -32,7 +32,8 @@ div id="container
       div id="subtitle_edit"
 
     div id="time_points"
-      div.time-marker id="time_marker" &nbsp;
+      div.slider-box
+        div.time-marker id="time_marker" &nbsp;
       - for i in 1..4 do
         div.time-points{class="#{'time-points-'+i.to_s}"}
           div.label #{i}
@@ -40,6 +41,13 @@ div id="container
             span.start start
             | &nbsp;
             span.stop stop
+      div id="scrollbar"
+        div id="fakeContent" 
+         | &nbsp;
+      div id="scroll-controls"
+        span.zoomin +
+        | &nbsp;
+        span.zoomout -
 
     div id="help"
       h3 How do I use this?
