@@ -61,7 +61,7 @@ class TimePointsController < ApplicationController
     @time_point.voice = params[:voice]
 
     end_point = nil
-    if params[:end] != "null"
+    if params[:end]
       end_point = TimePoint.find(params[:end][:id])
       end_point.time = params[:end][:time]
       # can't figure out how to put this in the validator..
