@@ -69,10 +69,14 @@ class TimePointsController < ApplicationController
         .where(['cast(time as double precision) >= ?', @time_point.time.to_f])
         .where(['cast(time as double precision) <= ?', end_point.time.to_f])
         .where(['id not in (?, ?)', @time_point.id, end_point.id])
+        .where(:voice => @time_point.voice,
+               :video_id => @time_point.video_id)
         .count
       before = TimePoint
         .where(['cast(time as double precision) <= ?', @time_point.time.to_f])
         .where(['id != ?', @time_point.id])
+        .where(:voice => @time_point.voice,
+               :video_id => @time_point.video_id)
         .order('cast(time as double precision)')
         .last
       if between == 0 && (before.nil? || before.time_point_type == 1)
