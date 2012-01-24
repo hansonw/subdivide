@@ -378,8 +378,15 @@ class Subdivide
   procUpdateTimePoint: (json) ->
     for pt in @time_points
       if pt.id == json.id
-        pt.time = json.time
-    @subtitles.sort((a, b) -> a.start_time.time - b.start_time.time)
+        pt.time = parseFloat(json.time)
+        if pt.sub != null && pt == pt.sub.start_time
+          # preserve subtitle edit box ordering
+          @subtitles.sort((a, b) -> a.start_time.time - b.start_time.time)
+          i = @subtitles.indexOf(pt.sub)
+          if i > 0
+            pt.sub.div.insertAfter(@subtitles[i-1].div)
+          else if i+1 < @subtitles.length
+            pt.sub.div.insertBefore(@subtitles[i+1].div)
     @updateTimePointDivs()
 
   procDeleteTimePoint: (id) ->
