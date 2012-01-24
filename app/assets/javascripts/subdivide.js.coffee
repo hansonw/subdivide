@@ -263,6 +263,7 @@ class Subdivide
     @zoomLevel = 0
     @time_points_div.css('width', @barWidth)
     $('.slider-box').click(@procTimePointClick)
+                    .disableSelection()
     @scrollbar.css('width', @barWidth)
     @scrollbar.jScrollPane({
       contentWidth: @barWidth+1,
@@ -306,8 +307,15 @@ class Subdivide
           pt.div.draggable({
             axis: 'x',
           })
+          pt.div.resizable({
+            handles: 'e, w',
+            containment: 'parent',
+            minWidth: 1,
+          })
           pt.div.bind('drag', {timepoint: pt}, @procDrag)
           pt.div.bind('dragstop', {timepoint: pt}, @procDragStop)
+          pt.div.bind('resize', {timepoint: pt}, @procResize)
+          pt.div.bind('resizestop', {timepoint: pt}, @procResizeStop)
         else
           # in case anything was updated
           pt.div.css('left', @timeToPos(pt.time))
@@ -371,6 +379,7 @@ class Subdivide
     for pt in @time_points
       if pt.id == json.id
         pt.time = json.time
+    @subtitles.sort((a, b) -> a.start_time.time - b.start_time.time)
     @updateTimePointDivs()
 
   procDeleteTimePoint: (id) ->
@@ -459,12 +468,12 @@ class Subdivide
   procTimePointClick: (event) =>
     @video.prop('currentTime', @posToTime(event.offsetX))
 
-  procDrag: (event) =>
+  procDrag: (event, ui) =>
     pt = event.data.timepoint
     if pt.sub then @selectActiveSubtitle(pt.sub)
     return true
 
-  procDragStop: (event) =>
+  procDragStop: (event, ui) =>
     pt = event.data.timepoint
     start = @posToTime(parseInt(pt.div.css('left')))
     end = if pt.end == null then start \
@@ -473,6 +482,34 @@ class Subdivide
       pt.time = start
       if pt.end != null then pt.end.time = end
       pt.updateWithEnd()
+
+    @updateTimePointDivs()
+    if pt.sub then @setActiveSubtitle(pt.sub)
+
+  procResize: (event, ui) =>
+    pt = event.data.timepoint
+    if pt.sub then @selectActiveSubtitle(pt.sub)
+    return true
+
+  procResizeStop: (event, ui) =>
+    pt = event.data.timepoint
+    start = ui.position.left
+    width = ui.size.width
+    if start == ui.originalPosition.left
+      if width != ui.originalSize.width
+        if pt.end == null 
+          pt.end = new TimePoint(pt.voice, @posToTime(start + width), 1)
+          pt.end.create()
+        else
+          pt.end.time = @posToTime(start + width)
+          pt.end.update()
+    else
+      orig_time = pt.time
+      pt.time = @posToTime(start)
+      pt.update()
+      if pt.end == null
+        pt.end = new TimePoint(pt.voice, orig_time, 1)
+        pt.end.create()
 
     @updateTimePointDivs()
     if pt.sub then @setActiveSubtitle(pt.sub)
