@@ -4,6 +4,9 @@ pad = (num, d) ->
     res = '0' + res
   return res
 
+timeEqual = (a, b) =>
+  Math.abs(a-b) <= 1e-5
+
 class Cuepoint
   constructor: (@video) ->
     @last_active = {}
@@ -142,6 +145,11 @@ class Subtitle
     @text = event.currentTarget.innerHTML
     @update()
 
+  handleSkip: (event) =>
+    event.stopPropagation()
+    window.subdivide.setTime(
+      if @end_time == null then @start_time.time else @end_time.time)
+
   handleDelete: =>
     @delete()
     @start_time.delete()
@@ -168,8 +176,16 @@ class Subtitle
                             .click(-> false)
                             .keydown(@handleKeydown)
                             .blur(@handleEndTimeEdit))
-    dat.append($('<div />').addClass('delete')
-                           .append($('<a href="#"/>').append('&times;'))
+    dat.append(' ')
+    # I don't have to do anything for this; regular subtitle click works
+    dat.append($('<span />').addClass('repeat control')
+                            .append('&#10226;'))
+    dat.append(' ')
+    dat.append($('<span />').addClass('skip control')
+                            .append('&crarr;')
+                            .click(@handleSkip))
+    dat.append($('<div />').addClass('delete control')
+                           .append('&times;')
                            .click(@handleDelete))
     dat.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
@@ -236,9 +252,9 @@ class Subdivide
     @userScrolling = false
     $('.zoomin').click({dir: 1}, @procZoom)
     $('.zoomout').click({dir: -1}, @procZoom)
-    @video.bind('timeupdate', @procTimeUpdate)
     # Seeking the video should auto-scroll, always.
-    @video.bind('seeked', => @userScrolling = false)
+    @video.bind('seeking', => @userScrolling = false)
+    @video.bind('timeupdate', @procTimeUpdate)
     @time_points = []
     @subtitles = []
     @shift_pressed = false
@@ -337,9 +353,17 @@ class Subdivide
     id = parseInt(id)
     @subtitles = (sub for sub in @subtitles when sub.id != id)
 
+  setTime: (time) =>
+    # Force a time update.
+    if timeEqual(@video.prop('currentTime'), time)
+      @userScrolling = false
+      @procTimeUpdate()
+    else
+      @video.prop('currentTime', time)
+
   setActiveSubtitle: (sub) ->
     @selectActiveSubtitle(sub)
-    @video.prop('currentTime', sub.start_time.time)
+    @setTime(sub.start_time.time)
 
   selectActiveSubtitle: (sub) ->
     div = sub.div

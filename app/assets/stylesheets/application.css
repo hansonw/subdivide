@@ -240,3 +240,8 @@ h3 {
   right: -30px;
   cursor: pointer;
 }
+
+.control {
+  cursor: pointer;
+  z-index: 999;
+}
