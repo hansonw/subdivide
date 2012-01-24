@@ -157,6 +157,7 @@ class Subtitle
     dat.append($('<span />').addClass('startTime')
                             .prop('contenteditable', true)
                             .append(@start_time.formatTime())
+                            .click(-> false)
                             .keydown(@handleKeydown)
                             .blur(@handleStartTimeEdit))
     dat.append(' - ')
@@ -164,6 +165,7 @@ class Subtitle
                             .prop('contenteditable', true)
                             .append(if @end_time then @end_time.formatTime() \
                                     else '?')
+                            .click(-> false)
                             .keydown(@handleKeydown)
                             .blur(@handleEndTimeEdit))
     dat.append($('<div />').addClass('delete')
@@ -171,6 +173,7 @@ class Subtitle
                            .click(@handleDelete))
     dat.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
+                           .click(-> false)
                            .append(@text)
                            .keydown(@handleKeydown)
                            .blur(@handleTextEdit))
@@ -224,14 +227,18 @@ class Subdivide
     @zoomWidth = @barWidth + 1
     @zoomLevel = 0
     @time_points_div.css('width', @barWidth)
+    $('.slider-box').click(@procTimePointClick)
     @scrollbar.css('width', @barWidth)
     @scrollbar.jScrollPane({
       contentWidth: @barWidth+1,
     })
     @scrollbar.bind('jsp-scroll-x', @procScroll)
+    @userScrolling = false
     $('.zoomin').click({dir: 1}, @procZoom)
     $('.zoomout').click({dir: -1}, @procZoom)
     @video.bind('timeupdate', @procTimeUpdate)
+    # Seeking the video should auto-scroll, always.
+    @video.bind('seeked', => @userScrolling = false)
     @time_points = []
     @subtitles = []
     @shift_pressed = false
@@ -304,7 +311,10 @@ class Subdivide
       @subtitles.sort((a, b) -> a.start_time.time - b.start_time.time)
       @createSubtitleDivs()
       sub.div.click(=> @setActiveSubtitle(sub))
-      pt[0].div.click(=> @setActiveSubtitle(sub))
+      pt[0].div.click((e) =>
+        @setActiveSubtitle(sub)
+        e.stopPropagation()
+      )
       pt[0].sub = sub
 
   procUpdateSubtitle: (json) ->
@@ -325,8 +335,6 @@ class Subdivide
 
   procDeleteSubtitle: (id) ->
     id = parseInt(id)
-    console.log(@subtitles)
-    console.log(id)
     @subtitles = (sub for sub in @subtitles when sub.id != id)
 
   setActiveSubtitle: (sub) ->
@@ -369,13 +377,18 @@ class Subdivide
       @scrollbar.data('jsp').reinitialise({contentWidth: @zoomWidth})
       pct = Math.min(pct, 1 - 1/(1 + @zoomLevel))
       @scrollbar.data('jsp').scrollToX(pct * @zoomWidth)
+      @userScrolling = false
 
   procScroll: (event) =>
     @updateTimePointDivs()
     @updateTimeMarker()
+    @userScrolling = true
 
   procTimeUpdate: (event) =>
     @updateTimeMarker()
+    # If the user manually scrolled, don't auto-scroll.
+    if @userScrolling
+      return
     # Keep the marker within 20px of the slider bounds.
     bound = 20
     cur_pos = @scrollbar.data('jsp').getContentPositionX()
@@ -389,6 +402,12 @@ class Subdivide
       diff = mark_pos - (@barWidth - bound)
       @scrollbar.data('jsp').scrollToX(
         Math.min(@zoomWidth - @barWidth, cur_pos + diff))
+    @userScrolling = false
+
+  procTimePointClick: (event) =>
+    clickX = @scrollbar.data('jsp').getContentPositionX() + event.offsetX
+    @video.prop('currentTime',
+      clickX / @zoomWidth * @video.prop('duration'))
 
   initJug: =>
     window.jug = new Juggernaut({
@@ -398,7 +417,6 @@ class Subdivide
       transports: ['xhr-polling', 'jsonp-polling']
     })
     jug.subscribe(get_channel_name(), (data) =>
-      console.log(data)
       if data.type == 'update_subtitle'
         @procUpdateSubtitle(data.value)
       else if data.type == 'update_time_point'
