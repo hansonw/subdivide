@@ -1,3 +1,5 @@
+EPSILON = 1e-4
+
 pad = (num, d) ->
   res = String(num)
   while res.length < d
@@ -5,7 +7,7 @@ pad = (num, d) ->
   return res
 
 timeEqual = (a, b) =>
-  Math.abs(a-b) <= 1e-5
+  Math.abs(a-b) <= EPSILON
 
 class Cuepoint
   constructor: (@video) ->
@@ -22,7 +24,7 @@ class Cuepoint
     currentTime = @video.prop('currentTime')
     for subtitle in window.subdivide.subtitles
       if !subtitle.end_time || currentTime <= subtitle.end_time.time
-        if currentTime >= subtitle.start_time.time
+        if currentTime >= subtitle.start_time.time - EPSILON
           if first == true && !@last_active[subtitle.id]
             window.subdivide.selectActiveSubtitle(subtitle)
             first = false
@@ -92,6 +94,23 @@ class TimePoint
     data = {
         voice: @voice,
         time: @time,
+        time_point_type: @type
+    }
+    jQuery.ajax({
+        type: 'PUT',
+        url: location.pathname + '/time_points/' + @id + '.json',
+        data: data,
+        success: @_onUpdateSuccess
+    })
+
+  updateWithEnd: =>
+    data = {
+        voice: @voice,
+        time: @time,
+        end: if @end != null then {
+          id: @end.id,
+          time: @end.time
+        } else 'null'
         time_point_type: @type
     }
     jQuery.ajax({
@@ -268,9 +287,13 @@ class Subdivide
     @loadTimePoints()
     @initJug()
 
-  timeToPos: (time) ->
+  timeToPos: (time) =>
     return Math.ceil(time / @video.prop('duration') * @zoomWidth) -
       @scrollbar.data('jsp').getContentPositionX()
+
+  posToTime: (pos) =>
+    return (pos + @scrollbar.data('jsp').getContentPositionX()) / @zoomWidth *
+      @video.prop('duration')
 
   updateTimePointDivs: ->
     prevVoice = {}
@@ -280,6 +303,11 @@ class Subdivide
         if pt.div == null
           $('.slider-box', @time_points_div).append(
             pt.createDiv(@timeToPos(pt.time)))
+          pt.div.draggable({
+            axis: 'x',
+          })
+          pt.div.bind('drag', {timepoint: pt}, @procDrag)
+          pt.div.bind('dragstop', {timepoint: pt}, @procDragStop)
         else
           # in case anything was updated
           pt.div.css('left', @timeToPos(pt.time))
@@ -429,9 +457,25 @@ class Subdivide
     @userScrolling = false
 
   procTimePointClick: (event) =>
-    clickX = @scrollbar.data('jsp').getContentPositionX() + event.offsetX
-    @video.prop('currentTime',
-      clickX / @zoomWidth * @video.prop('duration'))
+    @video.prop('currentTime', @posToTime(event.offsetX))
+
+  procDrag: (event) =>
+    pt = event.data.timepoint
+    if pt.sub then @selectActiveSubtitle(pt.sub)
+    return true
+
+  procDragStop: (event) =>
+    pt = event.data.timepoint
+    start = @posToTime(parseInt(pt.div.css('left')))
+    end = if pt.end == null then start \
+          else start + parseFloat(pt.end.time) - pt.time
+    if start >= 0 && end <= @video.prop('duration')
+      pt.time = start
+      if pt.end != null then pt.end.time = end
+      pt.updateWithEnd()
+
+    @updateTimePointDivs()
+    if pt.sub then @setActiveSubtitle(pt.sub)
 
   initJug: =>
     window.jug = new Juggernaut({

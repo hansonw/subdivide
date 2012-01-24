@@ -46,12 +46,12 @@ class TimePoint < ActiveRecord::Base
     next_tp = TimePoint.where(['cast(time as double precision) >= ?', cur_time])
                        .where(:voice => voice, :video_id => video_id)
                        .where(['id != ?', id])
-                       .order('time')
+                       .order('cast(time as double precision)')
                        .first;
     prev_tp = TimePoint.where(['cast(time as double precision) <= ?', cur_time])
                        .where(:voice => voice, :video_id => video_id)
                        .where(['id != ?', id])
-                       .order('time')
+                       .order('cast(time as double precision)')
                        .last;
     if (next_tp.nil? == false && time.to_f >= next_tp.time.to_f) ||
        (prev_tp.nil? == false && time.to_f <= prev_tp.time.to_f)

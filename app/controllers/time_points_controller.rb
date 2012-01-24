@@ -59,16 +59,53 @@ class TimePointsController < ApplicationController
     @time_point.time = params[:time]
     @time_point.time_point_type = params[:time_point_type].to_i
     @time_point.voice = params[:voice]
-    if @time_point.save()
-      data = {:type => 'update_time_point', :value => @time_point}
+
+    end_point = nil
+    if params[:end] != "null"
+      end_point = TimePoint.find(params[:end][:id])
+      end_point.time = params[:end][:time]
+      # can't figure out how to put this in the validator..
+      between = TimePoint
+        .where(['cast(time as double precision) >= ?', @time_point.time.to_f])
+        .where(['cast(time as double precision) <= ?', end_point.time.to_f])
+        .where(['id not in (?, ?)', @time_point.id, end_point.id])
+        .count
+      before = TimePoint
+        .where(['cast(time as double precision) <= ?', @time_point.time.to_f])
+        .where(['id != ?', @time_point.id])
+        .order('cast(time as double precision)')
+        .last
+      if between == 0 && (before.nil? || before.time_point_type == 1)
+        success = @time_point.save(:validate => false) &&
+                  end_point.save(:validate => false)
+      else
+        success = false
+      end
     else
+      success = @time_point.save()
+    end
+    if success
+      status = 200
+      data = {:type => 'update_time_point', :value => @time_point}
+      Juggernaut.publish(@time_point.video.uuid, data)
+      if end_point.nil? == false
+        data = {:type => 'update_time_point', :value => end_point}
+        Juggernaut.publish(@time_point.video.uuid, data)
+      end
+    else
+      status = 400
       data = {:type => 'update_time_point',
               :value => TimePoint.find(params[:id])}
+      Juggernaut.publish(@time_point.video.uuid, data)
+      if end_point.nil? == false
+        data = {:type => 'update_time_point',
+                :value => TimePoint.find(params[:end][:id])}
+        Juggernaut.publish(@time_point.video.uuid, data)
+      end
     end
-    Juggernaut.publish(@time_point.video.uuid, data)
     respond_to do |format|
       format.xml  { render :xml => @time_point }
-      format.json { render :json => @time_point }
+      format.json { render :json => @time_point, :status => status }
     end
   end
 
