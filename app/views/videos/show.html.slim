@@ -7,11 +7,7 @@ javascript:
 div id="container
   div id="header"
     img src="#{asset_path('logo.png')}" alt="subdivide" title="subdivide"
-    /h1
-      sub
-        font color="orange" sub
-      font color="red" divide
-    span.menu Browse | Upload
+    input class="search_bar" placeholder="Enter YouTube URL or Title"
 
   h2 What is Machine Learning?
 
@@ -28,7 +24,11 @@ div id="container
       source src==@video.url
 
     div id="sidebar"
-      span.subtitle-title Subtitles
+      div.subtitle-title
+        span Subtitles
+        select.language_select
+          option value="2" English
+          option value="3" Français (Canada)
       div id="subtitle_edit"
 
     div id="time_points"

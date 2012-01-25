@@ -245,3 +245,19 @@ h3 {
   cursor: pointer;
   z-index: 999;
 }
+
+.search_bar {
+  position: absolute;
+  font-size: 1em;
+  margin-left: 2em;
+  margin-top: 1.25em;
+  padding: .25em;
+  width: 400px; 
+}
+
+.language_select {
+  float: right;
+  margin: 0 0 -1px 0;
+  padding: 0;
+  width: 125px;
+}
