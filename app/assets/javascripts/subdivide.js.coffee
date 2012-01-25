@@ -198,7 +198,7 @@ class Subtitle
     dat.append(' ')
     # I don't have to do anything for this; regular subtitle click works
     dat.append($('<span />').addClass('repeat control')
-                            .append('&#10226;'))
+                            .append('&#8634;'))
     dat.append(' ')
     dat.append($('<span />').addClass('skip control')
                             .append('&crarr;')
