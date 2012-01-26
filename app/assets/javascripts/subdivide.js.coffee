@@ -85,7 +85,7 @@ class TimePoint
     }
     jQuery.ajax({
         type: 'POST',
-        url: location.pathname + '/time_points.json',
+        url: "/videos/" + video_id + '/time_points.json',
         data: data,
         success: @_onCreateSuccess
     })
@@ -98,7 +98,7 @@ class TimePoint
     }
     jQuery.ajax({
         type: 'PUT',
-        url: location.pathname + '/time_points/' + @id + '.json',
+        url: "/videos/" + video_id + '/time_points/' + @id + '.json',
         data: data,
         success: @_onUpdateSuccess
     })
@@ -115,7 +115,7 @@ class TimePoint
     }
     jQuery.ajax({
         type: 'PUT',
-        url: location.pathname + '/time_points/' + @id + '.json',
+        url: "/videos/" + video_id + '/time_points/' + @id + '.json',
         data: data,
         success: @_onUpdateSuccess
     })
@@ -124,7 +124,7 @@ class TimePoint
     if @div then @div.remove()
     jQuery.ajax({
         type: 'DELETE',
-        url: location.pathname + '/time_points/' + @id + '.json',
+        url: "/videos/" + video_id + '/time_points/' + @id + '.json',
     })
 
 class Subtitle
@@ -231,7 +231,7 @@ class Subtitle
     }
     jQuery.ajax({
         type: 'POST',
-        url: location.pathname + '/time_points/' + @start_time.id + '/subtitles.json',
+        url: "/videos/" + video_id + '/time_points/' + @start_time.id + '/subtitles.json',
         data: data,
         success: @_onCreateSuccess
     })
@@ -242,7 +242,7 @@ class Subtitle
     }
     jQuery.ajax({
         type: 'PUT',
-        url: location.pathname + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
+        url: "/videos/" + video_id + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
         data: data,
         success: @_onUpdateSuccess
     })
@@ -251,7 +251,7 @@ class Subtitle
     if @div then @div.remove()
     jQuery.ajax({
         type: 'DELETE',
-        url: location.pathname + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
+        url: "/videos/" + video_id + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
     })
 
 class Subdivide
@@ -272,6 +272,7 @@ class Subdivide
     @userScrolling = false
     $('.zoomin').click({dir: 1}, @procZoom)
     $('.zoomout').click({dir: -1}, @procZoom)
+    $('.language_select').change(@initAgain)
     # Seeking the video should auto-scroll, always.
     @video.bind('seeking', => @userScrolling = false)
     @video.bind('timeupdate', @procTimeUpdate)
@@ -285,6 +286,19 @@ class Subdivide
         (e) => @procControl(e))
 
   init: =>
+    @loadTimePoints()
+    @initJug()
+
+  initAgain: =>
+    for pt in @time_points
+      if pt.div
+        pt.div.remove()
+    @time_points = []
+    for sub in @subtitles
+      if sub.div
+        sub.div.remove()
+    @subtitles = []
+    window.video_id = $('.language_select option:selected').prop('value')
     @loadTimePoints()
     @initJug()
 
@@ -528,7 +542,7 @@ class Subdivide
       port: 80,
       transports: ['xhr-polling', 'jsonp-polling']
     })
-    jug.subscribe(get_channel_name(), (data) =>
+    jug.subscribe(channel_name_map[video_id], (data) =>
       if data.type == 'update_subtitle'
         @procUpdateSubtitle(data.value)
       else if data.type == 'update_time_point'
@@ -549,7 +563,7 @@ class Subdivide
   loadTimePoints: =>
     jQuery.ajax({
         type: 'GET',
-        url: location.pathname + '/time_points.json',
+        url: "/videos/" + video_id + '/time_points.json',
         success: (data) =>
           for value in data
             @procAddTimePoint(value)
@@ -561,7 +575,7 @@ class Subdivide
   loadSubtitles: (time_point_id) =>
     jQuery.ajax({
         type: 'GET',
-        url: location.pathname + '/time_points/' + time_point_id + '/subtitles.json',
+        url: "/videos/" + video_id + '/time_points/' + time_point_id + '/subtitles.json',
         success: (data) =>
           for value in data
             @procAddSubtitle(value)

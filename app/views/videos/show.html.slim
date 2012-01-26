@@ -1,8 +1,6 @@
 javascript:
-  function get_channel_name() {
-    return '#{@video.uuid}';
-  }
-
+  var video_id = #{@video.id};
+  var channel_name_map = {2: '#{@video.uuid}', 3: '#{Video.find(3).uuid}'};
 
 div id="container
   div id="header"
@@ -19,6 +17,7 @@ div id="container
         div.subtitle.subtitle-track-2 &nbsp;
         div.subtitle.subtitle-track-3 &nbsp;
         div.subtitle.subtitle-track-4 &nbsp;
+
 
     video id="video" controls="controls" width=640 height=360
       source src==@video.url
