@@ -162,7 +162,6 @@ class Subtitle
 
   handleTextEdit: (event) =>
     @text = event.currentTarget.innerHTML
-    console.log(event)
     event.currentTarget.style.color = '#333'
     @update()
 
@@ -301,7 +300,7 @@ class Subdivide
       if sub.div
         sub.div.remove()
     @subtitles = []
-    window.video_id = $('.language_select option:selected').prop('value')
+    window.video_id = parseInt($('.language_select option:selected').prop('value'))
     @loadTimePoints()
     @initJug()
 
