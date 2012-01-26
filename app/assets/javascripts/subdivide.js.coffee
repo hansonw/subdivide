@@ -162,6 +162,8 @@ class Subtitle
 
   handleTextEdit: (event) =>
     @text = event.currentTarget.innerHTML
+    console.log(event)
+    event.currentTarget.style.color = '#333'
     @update()
 
   handleSkip: (event) =>
@@ -209,6 +211,7 @@ class Subtitle
     dat.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
                            .click(-> false)
+                           .css('color', if video_id == 2 then '#333' else '#999')
                            .append(@text)
                            .keydown(@handleKeydown)
                            .blur(@handleTextEdit))
