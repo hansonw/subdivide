@@ -1,5 +1,5 @@
 class Subtitle < ActiveRecord::Base
-  belongs_to :video
+  belongs_to :subtitle_track
 
   validate :start_time, :presence => true
   validate :end_must_follow_start, :no_overlaps
@@ -13,13 +13,13 @@ class Subtitle < ActiveRecord::Base
   def no_overlaps
     prev_sub = Subtitle.where('start_time <= ?', start_time)
                        .where(id.nil? ? '1=1' : ['id != ?', id])
-                       .where(:video_id => video_id)
+                       .where(:subtitle_track_id => subtitle_track_id)
                        .where(:voice => voice)
                        .order(:start_time)
                        .last()
     next_sub = Subtitle.where('start_time >= ?', start_time)
                        .where(id.nil? ? '1=1' : ['id != ?', id])
-                       .where(:video_id => video_id)
+                       .where(:subtitle_track_id => subtitle_track_id)
                        .where(:voice => voice)
                        .order(:start_time)
                        .first()

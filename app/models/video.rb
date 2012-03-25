@@ -1,5 +1,5 @@
 class Video < ActiveRecord::Base
-  has_many :subtitle
+  has_many :subtitle_track_set
 
   validates :url, :presence => true
   
