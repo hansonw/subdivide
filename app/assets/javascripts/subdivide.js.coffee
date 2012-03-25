@@ -461,6 +461,9 @@ class Subdivide
       @scrollbar.data('jsp').reinitialise({contentWidth: @zoomWidth})
       pct = Math.min(pct, 1 - 1/(1 + @zoomLevel))
       @scrollbar.data('jsp').scrollToX(pct * @zoomWidth)
+      # hack: seems to not redraw properly for whatever reason. Force it
+      @scrollbar.css('display', 'none')
+      @scrollbar.css('display', '')
       @userScrolling = false
 
   procScroll: (event) =>
