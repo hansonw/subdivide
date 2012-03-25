@@ -1,0 +1,21 @@
+<%= form_for(@subtitle_track) do |f| %>
+  <% if @subtitle_track.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@subtitle_track.errors.count, "error") %> prohibited this subtitle_track from being saved:</h2>
+
+      <ul>
+      <% @subtitle_track.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

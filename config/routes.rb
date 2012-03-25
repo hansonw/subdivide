@@ -1,4 +1,8 @@
 Subdivide::Application.routes.draw do
+  resources :subtitle_track_sets
+
+  resources :subtitle_tracks
+
   resources :videos do
     resources :subtitles
   end

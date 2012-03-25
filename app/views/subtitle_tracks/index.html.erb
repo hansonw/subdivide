@@ -1,0 +1,23 @@
+<h1>Listing subtitle_tracks</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @subtitle_tracks.each do |subtitle_track| %>
+  <tr>
+    <td><%= subtitle_track.title %></td>
+    <td><%= link_to 'Show', subtitle_track %></td>
+    <td><%= link_to 'Edit', edit_subtitle_track_path(subtitle_track) %></td>
+    <td><%= link_to 'Destroy', subtitle_track, confirm: 'Are you sure?', method: :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Subtitle track', new_subtitle_track_path %>
