@@ -1,13 +1,33 @@
-EPSILON = 1e-4
+class Util
+  @EPSILON = 1e-4
 
-pad = (num, d) ->
-  res = String(num)
-  while res.length < d
-    res = '0' + res
-  return res
+  @pad: (num, d) ->
+    res = String(num)
+    while res.length < d
+      res = '0' + res
+    return res
 
-timeEqual = (a, b) =>
-  Math.abs(a-b) <= EPSILON
+  @timeEqual: (a, b) ->
+    Math.abs(a-b) <= @EPSILON
+
+  @parseTime: (str) =>
+    parts = str.split(':')
+    if parts.length == 0
+      return null
+    t = 0
+    for p in parts
+      f = parseFloat(p)
+      if f == NaN
+        return null
+      t = t * 60 + f
+    return t
+
+  @formatTime: (time) ->
+    h = Math.floor(time / 3600)
+    m = Math.floor(time / 60)
+    s = Math.floor(time) % 60
+    ms = Math.floor((time - Math.floor(time)) * 1000)
+    return h + ':' + @pad(m, 2) + ':' + @pad(s, 2) + '.' + @pad(ms, 3)
 
 class Cuepoint
   constructor: (@video) ->
@@ -24,114 +44,22 @@ class Cuepoint
     currentTime = @video.prop('currentTime')
     for subtitle in window.subdivide.subtitles
       if !subtitle.end_time || currentTime <= subtitle.end_time.time
-        if currentTime >= subtitle.start_time.time - EPSILON
+        if currentTime >= subtitle.start_time - Util.EPSILON
           if first == true && !@last_active[subtitle.id]
             window.subdivide.selectActiveSubtitle(subtitle)
             first = false
           active[subtitle.id] = 1
-          $('.subtitle')[subtitle.start_time.voice].innerHTML = subtitle.text
-          used[subtitle.start_time.voice] = true
+          $('.subtitle')[subtitle.voice].innerHTML = subtitle.text
+          used[subtitle.voice] = true
     for flag,i in used
       $('.subtitle')[i].style.display = if flag then 'block' else 'none'
     @last_active = active
 
-class TimePoint
-  constructor: (@voice, @time, @type) ->
-    @id = -1
-    @end = null
-    @sub = null
-    @div = null
-
-  @parseTime: (str) =>
-    parts = str.split(':')
-    if parts.length == 0
-      return null
-    t = 0
-    for p in parts
-      f = parseFloat(p)
-      if f == NaN
-        return null
-      t = t * 60 + f
-    return t
-    
-  formatTime: () ->
-    h = Math.floor(@time / 3600)
-    m = Math.floor(@time / 60)
-    s = Math.floor(@time) % 60
-    ms = Math.floor((@time - Math.floor(@time)) * 1000)
-    return h + ':' + pad(m, 2) + ':' + pad(s, 2) + '.' + pad(ms, 3)
-
-  createDiv: (pos) ->
-    div = $('<div />')
-    div.addClass('slider')
-    div.css('left', pos)
-    div.css('top', 2 + @voice * 16)
-    @div = div
-    return div
-
-  _onCreateSuccess: (data) =>
-    @id = data['id']
-    if !@type
-      sub = new Subtitle(@, 'speech')
-      sub.create()
-
-  _onUpdateSuccess: (data) =>
-
-  create: =>
-    data = {
-        voice: @voice,
-        time: @time,
-        time_point_type: @type
-    }
-    jQuery.ajax({
-        type: 'POST',
-        url: "/videos/" + video_id + '/time_points.json',
-        data: data,
-        success: @_onCreateSuccess
-    })
-
-  update: =>
-    data = {
-        voice: @voice,
-        time: @time,
-        time_point_type: @type
-    }
-    jQuery.ajax({
-        type: 'PUT',
-        url: "/videos/" + video_id + '/time_points/' + @id + '.json',
-        data: data,
-        success: @_onUpdateSuccess
-    })
-
-  updateWithEnd: =>
-    data = {
-        voice: @voice,
-        time: @time,
-        end: if @end != null then {
-          id: @end.id,
-          time: @end.time
-        } else 'null'
-        time_point_type: @type
-    }
-    jQuery.ajax({
-        type: 'PUT',
-        url: "/videos/" + video_id + '/time_points/' + @id + '.json',
-        data: data,
-        success: @_onUpdateSuccess
-    })
-
-  delete: =>
-    if @div then @div.remove()
-    jQuery.ajax({
-        type: 'DELETE',
-        url: "/videos/" + video_id + '/time_points/' + @id + '.json',
-    })
-
 class Subtitle
-  constructor: (@start_time, @text) ->
+  constructor: (@voice, @start_time, @end_time, @text) ->
     @id = -1
-    @end_time = null
     @div = null
+    @time_div = null
 
   handleKeydown: (event) =>
     event.stopPropagation()
@@ -139,26 +67,20 @@ class Subtitle
       event.currentTarget.blur()
 
   handleStartTimeEdit: (event) =>
-    new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
+    new_time = Util.parseTime(event.currentTarget.innerHTML)
     if new_time == null
-      event.currentTarget.innerHTML = @start_time.formatTime()
+      event.currentTarget.innerHTML = Util.formatTime(@start_time)
     else
-      @start_time.time = new_time
-      @start_time.update()
+      @start_time = new_time
+      @update()
 
   handleEndTimeEdit: (event) =>
-    new_time = TimePoint.parseTime(event.currentTarget.innerHTML)
-    if new_time == null || new_time <= @start_time.time
+    new_time = Util.parseTime(event.currentTarget.innerHTML)
+    if new_time == null || new_time <= @start_time
       event.currentTarget.innerHTML =
-        if @end_time then @end_time.formatTime() \
-        else '?'
+        if @end_time == null then Util.formatTime(@end_time) else '?'
     else
-      if @end_time == null
-        @end_time = new TimePoint(@start_time.voice, new_time, 1)
-        @end_time.create()
-      else
-        @end_time.time = new_time
-        @end_time.update()
+      @end_time = new_time
 
   handleTextEdit: (event) =>
     @text = event.currentTarget.innerHTML
@@ -168,30 +90,27 @@ class Subtitle
   handleSkip: (event) =>
     event.stopPropagation()
     window.subdivide.setTime(
-      if @end_time == null then @start_time.time else @end_time.time)
+      if @end_time == null then @start_time else @end_time.time)
 
   handleDelete: =>
     @delete()
-    @start_time.delete()
-    if @end_time
-      @end_time.delete()
 
   createDiv: ->
     div = $('<div />')
     div.addClass('subtitle_edit_box')
     div.append($('<div />').addClass('voice')
-                           .append(@start_time.voice+1))
+                           .append(@voice+1))
     dat = $('<div />').addClass('subtitle_data')
     dat.append($('<span />').addClass('startTime')
                             .prop('contenteditable', true)
-                            .append(@start_time.formatTime())
+                            .append(Util.formatTime(@start_time))
                             .click(-> false)
                             .keydown(@handleKeydown)
                             .blur(@handleStartTimeEdit))
     dat.append(' - ')
     dat.append($('<span />').addClass('endTime')
                             .prop('contenteditable', true)
-                            .append(if @end_time then @end_time.formatTime() \
+                            .append(if @end_time then Util.formatTime(@end_time) \
                                     else '?')
                             .click(-> false)
                             .keydown(@handleKeydown)
@@ -218,9 +137,20 @@ class Subtitle
     @div = div
     return div
 
-  updateTimes: ->
-    $('.startTime', @div).html(@start_time.formatTime())
-    $('.endTime', @div).html(@end_time.formatTime())
+  createTimeDiv: (pos, width) =>
+    div = $('<div />')
+    div.addClass('slider')
+    div.css('left', pos)
+    if width != null
+      div.css('width', width)
+    div.css('top', 2 + @voice * 16)
+    @time_div = div
+    return div
+
+  updateDiv: ->
+    $('.startTime', @div).html(Util.formatTime(@start_time))
+    $('.endTime', @div).html(Util.formatTime(@end_time))
+    $('.subtitleText', @div).html(@text)
 
   _onCreateSuccess: (data) =>
     @id = data['id']
@@ -229,31 +159,39 @@ class Subtitle
 
   create: =>
     data = {
+        video: @video,
+        voice: @voice,
+        start_time: @start_time,
+        end_time: @end_time,
         text: @text
     }
     jQuery.ajax({
         type: 'POST',
-        url: "/videos/" + video_id + '/time_points/' + @start_time.id + '/subtitles.json',
+        url: "/videos/" + video_id + '/subtitles.json',
         data: data,
         success: @_onCreateSuccess
     })
 
   update: =>
     data = {
+        voice: @voice,
+        start_time: @start_time,
+        end_time: @end_time,
         text: @text
     }
     jQuery.ajax({
         type: 'PUT',
-        url: "/videos/" + video_id + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
+        url: "/videos/" + video_id + '/subtitles/' + @id + '.json',
         data: data,
         success: @_onUpdateSuccess
     })
 
   delete: =>
     if @div then @div.remove()
+    if @time_div then @time_div.remove()
     jQuery.ajax({
         type: 'DELETE',
-        url: "/videos/" + video_id + '/time_points/' + @start_time.id + '/subtitles/' + @id + '.json',
+        url: "/videos/" + video_id + '/subtitles/' + @id + '.json',
     })
 
 class Subdivide
@@ -278,30 +216,25 @@ class Subdivide
     # Seeking the video should auto-scroll, always.
     @video.bind('seeking', => @userScrolling = false)
     @video.bind('timeupdate', @procTimeUpdate)
-    @time_points = []
     @subtitles = []
     @shift_pressed = false
     for i in [1..4]
-      $('.controls-'+i+' .start').click({voice: i-1, type: 0},
+      $('.controls-'+i+' .start').click({voice: i-1, type: false},
         (e) => @procControl(e))
-      $('.controls-'+i+' .stop').click({voice: i-1, type: 1},
+      $('.controls-'+i+' .stop').click({voice: i-1, type: true},
         (e) => @procControl(e))
 
   init: =>
-    @loadTimePoints()
+    @loadSubtitles()
     @initJug()
 
   initAgain: =>
-    for pt in @time_points
-      if pt.div
-        pt.div.remove()
-    @time_points = []
     for sub in @subtitles
-      if sub.div
-        sub.div.remove()
+      sub.div.remove()
+      sub.time_div.remove()
     @subtitles = []
     window.video_id = parseInt($('.language_select option:selected').prop('value'))
-    @loadTimePoints()
+    @loadSubtitles()
     @initJug()
 
   timeToPos: (time) =>
@@ -312,102 +245,88 @@ class Subdivide
     return (pos + @scrollbar.data('jsp').getContentPositionX()) / @zoomWidth *
       @video.prop('duration')
 
-  updateTimePointDivs: ->
-    prevVoice = {}
-    for pt in @time_points
-      if !pt.type
-        prevVoice[pt.voice] = pt
-        if pt.div == null
-          $('.slider-box', @time_points_div).append(
-            pt.createDiv(@timeToPos(pt.time)))
-          pt.div.draggable({
-            axis: 'x',
-          })
-          pt.div.resizable({
-            handles: 'e, w',
-            containment: 'parent',
-            minWidth: 1,
-          })
-          pt.div.bind('drag', {timepoint: pt}, @procDrag)
-          pt.div.bind('dragstop', {timepoint: pt}, @procDragStop)
-          pt.div.bind('resize', {timepoint: pt}, @procResize)
-          pt.div.bind('resizestop', {timepoint: pt}, @procResizeStop)
-        else
-          # in case anything was updated
-          pt.div.css('left', @timeToPos(pt.time))
-      else if prevVoice[pt.voice]
-        prev = prevVoice[pt.voice]
-        prev.end = pt
-        prev.div.css('width', @timeToPos(pt.time) - @timeToPos(prev.time))
-        if prev.sub
-          prev.sub.end_time = pt
-          prev.sub.updateTimes()
+  updateTimeDivs: ->
+    for sub in @subtitles
+      sp = @timeToPos(sub.start_time)
+      w = if sub.end_time != null then @timeToPos(sub.end_time) - sp else null
+      if sub.time_div == null
+        $('.slider-box', @time_points_div).append(sub.createTimeDiv(sp, w))
+        sub.time_div.draggable({
+          axis: 'x',
+        })
+        sub.time_div.resizable({
+          handles: 'e, w',
+          containment: 'parent',
+          minWidth: 1,
+        })
+        sub.time_div.bind('drag', {subtitle: sub}, @procDrag)
+        sub.time_div.bind('dragstop', {subtitle: sub}, @procDragStop)
+        sub.time_div.bind('resize', {subtitle: sub}, @procResize)
+        sub.time_div.bind('resizestop', {subtitle: sub}, @procResizeStop)
+      else
+        # in case anything was updated
+        sub.time_div.css('left', sp)
+        if w != null
+          sub.time_div.css('width', w)
 
   updateTimeMarker: =>
     @time_marker.css('left', @timeToPos(@video.prop('currentTime')))
 
+  addTimePoint: (voice, time, is_end) =>
+    if is_end
+      before = (sub for sub in @subtitles when sub.start_time <= time && sub.voice == voice)
+      if before.length > 0
+        sub = before[before.length - 1]
+        if sub.end_time == null
+          sub.end_time = time
+          sub.update()
+    else
+      sub = new Subtitle(voice, time, null, 'speech')
+      sub.create()
+  
   createSubtitleDivs: ->
     prev = null
     for sub in @subtitles
       if !sub.div
-        sub.div = sub.createDiv()
+        sub.createDiv()
         if prev == null
           @subtitle_edit_div.prepend(sub.div)
         else
           sub.div.insertAfter(prev.div)
       prev = sub
 
-  addTimePoint: (voice, time, type) ->
-    time_point = new TimePoint(voice, time, type)
-    time_point.create()
+  procAddSubtitle: (data) ->
+    sub = new Subtitle(data.voice, data.start_time, data.end_time, data.text)
+    sub.id = data.id
+    @subtitles.push(sub)
+    @subtitles.sort((a, b) -> a.start_time - b.start_time)
+    @createSubtitleDivs()
+    @updateTimeDivs()
+    sub.div.click(=> @setActiveSubtitle(sub))
+    sp = @timeToPos(sub.start_time)
+    w = if sub.end_time != null then @timeToPos(sub.end_time) - sp else null
+    sub.time_div.click((e) =>
+      @setActiveSubtitle(sub)
+      e.stopPropagation()
+    )
 
-  procAddTimePoint: (json) ->
-    time_point = new TimePoint(json.voice, json.time, json.time_point_type)
-    time_point.id = json.id
-    @time_points.push(time_point)
-    @time_points.sort((a, b) -> a.time - b.time)
-    @updateTimePointDivs()
-
-  procAddSubtitle: (json) ->
-    pt = (pt for pt in @time_points when pt.id == json.time_point_id)
-    if pt.length > 0
-      sub = new Subtitle(pt[0], json.text)
-      if pt[0].end
-        sub.end_time = pt[0].end
-      sub.id = json.id
-      @subtitles.push(sub)
-      @subtitles.sort((a, b) -> a.start_time.time - b.start_time.time)
-      @createSubtitleDivs()
-      sub.div.click(=> @setActiveSubtitle(sub))
-      pt[0].div.click((e) =>
-        @setActiveSubtitle(sub)
-        e.stopPropagation()
-      )
-      pt[0].sub = sub
-
-  procUpdateSubtitle: (json) ->
+  procUpdateSubtitle: (data) ->
     for sub in @subtitles
-      if sub.id == json.id
-        sub.text = json.text
-        $('.subtitleText', sub.div).html(sub.text)
-
-  procUpdateTimePoint: (json) ->
-    for pt in @time_points
-      if pt.id == json.id
-        pt.time = parseFloat(json.time)
-        if pt.sub != null && pt == pt.sub.start_time
-          # preserve subtitle edit box ordering
-          @subtitles.sort((a, b) -> a.start_time.time - b.start_time.time)
-          i = @subtitles.indexOf(pt.sub)
-          if i > 0
-            pt.sub.div.insertAfter(@subtitles[i-1].div)
-          else if i+1 < @subtitles.length
-            pt.sub.div.insertBefore(@subtitles[i+1].div)
-    @updateTimePointDivs()
-
-  procDeleteTimePoint: (id) ->
-    id = parseInt(id)
-    @time_points = (pt for pt in @time_points when pt.id != id)
+      if sub.id == data.id
+        sub.voice = data.voice
+        sub.start_time = data.start_time
+        sub.end_time = data.end_time
+        sub.text = data.text
+        sub.updateDiv()
+        # preserve subtitle edit box ordering
+        @subtitles.sort((a, b) -> a.start_time - b.start_time)
+        i = @subtitles.indexOf(sub)
+        if i > 0
+          sub.div.insertAfter(@subtitles[i-1].div)
+        else if i+1 < @subtitles.length
+          sub.div.insertBefore(@subtitles[i+1].div)
+        @updateTimeDivs()
+        break
 
   procDeleteSubtitle: (id) ->
     id = parseInt(id)
@@ -415,7 +334,7 @@ class Subdivide
 
   setTime: (time) =>
     # Force a time update.
-    if timeEqual(@video.prop('currentTime'), time)
+    if Util.timeEqual(@video.prop('currentTime'), time)
       @userScrolling = false
       @procTimeUpdate()
     else
@@ -423,7 +342,7 @@ class Subdivide
 
   setActiveSubtitle: (sub) ->
     @selectActiveSubtitle(sub)
-    @setTime(sub.start_time.time)
+    @setTime(sub.start_time)
 
   selectActiveSubtitle: (sub) ->
     div = sub.div
@@ -437,15 +356,14 @@ class Subdivide
     if event.keyCode == 16 # shift
       @shift_pressed = true
     else if event.keyCode >= voice_min && event.keyCode <= voice_max
-      @addTimePoint event.keyCode-voice_min, @video.prop('currentTime'), if @shift_pressed then 1 else 0
+      @addTimePoint event.keyCode-voice_min, @video.prop('currentTime'), @shift_pressed
 
   procKeyUp: (event) =>
     if event.keyCode == 16 # shift
       @shift_pressed = false
 
   procControl: (event) =>
-    @addTimePoint(event.data.voice, @video.prop('currentTime'),
-                   event.data.type)
+    @addTimePoint(event.data.voice, @video.prop('currentTime'), event.data.type)
 
   procMouseDown: (event) =>
 
@@ -467,7 +385,7 @@ class Subdivide
       @userScrolling = false
 
   procScroll: (event) =>
-    @updateTimePointDivs()
+    @updateTimeDivs()
     @updateTimeMarker()
     @userScrolling = true
 
@@ -495,50 +413,37 @@ class Subdivide
     @video.prop('currentTime', @posToTime(event.offsetX))
 
   procDrag: (event, ui) =>
-    pt = event.data.timepoint
-    if pt.sub then @selectActiveSubtitle(pt.sub)
-    return true
+    sub = event.data.subtitle
+    @selectActiveSubtitle(sub)
 
   procDragStop: (event, ui) =>
-    pt = event.data.timepoint
-    start = @posToTime(parseInt(pt.div.css('left')))
-    end = if pt.end == null then start \
-          else start + parseFloat(pt.end.time) - pt.time
+    sub = event.data.subtitle
+    start = @posToTime(parseInt(sub.time_div.css('left')))
+    end = if sub.end_time == null then start \
+          else start + sub.end_time - sub.start_time
     if start >= 0 && end <= @video.prop('duration')
-      pt.time = start
-      if pt.end != null then pt.end.time = end
-      pt.updateWithEnd()
-
-    @updateTimePointDivs()
-    if pt.sub then @setActiveSubtitle(pt.sub)
+      sub.start_time = start
+      sub.end_time = end
+      sub.update()
+    
+    @updateTimeDivs()
+    @setActiveSubtitle(sub)
 
   procResize: (event, ui) =>
-    pt = event.data.timepoint
-    if pt.sub then @selectActiveSubtitle(pt.sub)
-    return true
+    sub = event.data.subtitle
+    @selectActiveSubtitle(sub)
 
   procResizeStop: (event, ui) =>
-    pt = event.data.timepoint
+    sub = event.data.subtitle
     start = ui.position.left
     width = ui.size.width
     if start == ui.originalPosition.left
-      if width != ui.originalSize.width
-        if pt.end == null 
-          pt.end = new TimePoint(pt.voice, @posToTime(start + width), 1)
-          pt.end.create()
-        else
-          pt.end.time = @posToTime(start + width)
-          pt.end.update()
+      sub.end_time = @posToTime(start + width)
     else
-      orig_time = pt.time
-      pt.time = @posToTime(start)
-      pt.update()
-      if pt.end == null
-        pt.end = new TimePoint(pt.voice, orig_time, 1)
-        pt.end.create()
-
-    @updateTimePointDivs()
-    if pt.sub then @setActiveSubtitle(pt.sub)
+      sub.start_time = @posToTime(start)
+    sub.update()
+    @updateTimeDivs()
+    @setActiveSubtitle(sub)
 
   initJug: =>
     window.jug = new Juggernaut({
@@ -550,37 +455,19 @@ class Subdivide
     jug.subscribe(channel_name_map[video_id], (data) =>
       if data.type == 'update_subtitle'
         @procUpdateSubtitle(data.value)
-      else if data.type == 'update_time_point'
-        @procUpdateTimePoint(data.value)
       else if data.type == 'create_subtitle'
         @procAddSubtitle(data.value)
-      else if data.type == 'create_time_point'
-        @procAddTimePoint(data.value)
-      else if data.type == 'delete_time_point'
-        @procDeleteTimePoint(data.value)
       else if data.type == 'delete_subtitle'
         @procDeleteSubtitle(data.value)
       else
         console.log('Unknown type ' + data.type)
       window.cuepoint.updateSubtitleDisplay()
     )
-  
-  loadTimePoints: =>
-    jQuery.ajax({
-        type: 'GET',
-        url: "/videos/" + video_id + '/time_points.json',
-        success: (data) =>
-          for value in data
-            @procAddTimePoint(value)
-          # subtitles can only be loaded after ALL time points have been created
-          for value in data
-            @loadSubtitles(value['id'])
-    })
 
-  loadSubtitles: (time_point_id) =>
+  loadSubtitles: =>
     jQuery.ajax({
         type: 'GET',
-        url: "/videos/" + video_id + '/time_points/' + time_point_id + '/subtitles.json',
+        url: "/videos/" + video_id + '/subtitles.json',
         success: (data) =>
           for value in data
             @procAddSubtitle(value)

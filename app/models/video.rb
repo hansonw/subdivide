@@ -1,6 +1,5 @@
 class Video < ActiveRecord::Base
-  has_many :time_point
-  has_many :subtitle, :through => :time_point
+  has_many :subtitle
 
   validates :url, :presence => true
   

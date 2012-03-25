@@ -1,6 +1,7 @@
 class SubtitlesController < ApplicationController
   def index
-    @subtitles = TimePoint.find(params[:time_point_id]).subtitle
+    y params
+    @subtitles = Video.find(params[:video_id]).subtitle
     respond_to do |format|
       format.html # index.html.slim
       format.xml  { render :xml => @subtitles }
@@ -22,15 +23,25 @@ class SubtitlesController < ApplicationController
 
   def create
     @subtitle = Subtitle.new do |s|
-      s.time_point_id = params[:time_point_id]
+      s.video_id = params[:video_id]
+      s.voice = params[:voice]
+      s.start_time = params[:start_time]
+      s.end_time = params[:end_time] == 'null' ? nil : params[:end_time]
       s.text = params[:text]
     end
-    @subtitle.save()
-    data = {:type => 'create_subtitle', :value => @subtitle}
-    Juggernaut.publish(@subtitle.time_point.video.uuid, data)
+    y @subtitle
+
+    status = 200
+    if @subtitle.save()
+      data = {:type => 'create_subtitle', :value => @subtitle}
+      Juggernaut.publish(@subtitle.video.uuid, data)
+    else
+      status = 400
+    end
+
     respond_to do |format|
       format.xml  { render :xml => @subtitle }
-      format.json { render :json => @subtitle }
+      format.json { render :json => @subtitle, :status => status }
     end
   end
 
@@ -45,13 +56,23 @@ class SubtitlesController < ApplicationController
 
   def update
     @subtitle = Subtitle.find(params[:id])
+    @subtitle.start_time = params[:start_time]
+    @subtitle.end_time = params[:end_time] == 'null' ? nil : params[:end_time]
     @subtitle.text = params[:text]
-    @subtitle.save()
-    data = {:type => 'update_subtitle', :value => @subtitle}
-    Juggernaut.publish(@subtitle.time_point.video.uuid, data)
+
+    status = 200
+    if @subtitle.save()
+      data = {:type => 'update_subtitle', :value => @subtitle}
+      Juggernaut.publish(@subtitle.video.uuid, data)
+    else
+      status = 400
+      data = {:type => 'update_subtitle', :value => Subtitle.find(params[:id])}
+      Juggernaut.publish(@subtitle.video.uuid, data)
+    end
+
     respond_to do |format|
       format.xml  { render :xml => @subtitle }
-      format.json { render :json => @subtitle }
+      format.json { render :json => @subtitle, :status => status }
     end
   end
 
@@ -60,7 +81,7 @@ class SubtitlesController < ApplicationController
     if @subtitle.nil? == false
       Subtitle.destroy(params[:id])
       data = {:type => 'delete_subtitle', :value => params[:id]}
-      Juggernaut.publish(@subtitle.time_point.video.uuid, data)
+      Juggernaut.publish(@subtitle.video.uuid, data)
     end
     @response = [:destroy => 'destroy']
     respond_to do |format|
