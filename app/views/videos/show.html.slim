@@ -1,13 +1,16 @@
 javascript:
   var video_id = #{@video.id};
-  var channel_name_map = {2: '#{@video.uuid}', 3: '#{Video.find(3).uuid}'};
+  var channel_name = '#{@video.uuid}';
+  var url = '#{@video.url}';
+  var yt_id = '#{@video.yt_url}';
 
 div id="container
   div id="header"
     img src="#{asset_path('logo.png')}" alt="subdivide" title="subdivide"
-    input class="search_bar" placeholder="Enter YouTube URL or Title"
+    form class="search_bar" method="post" action="/videos"
+      input name="yt_url" placeholder="Enter YouTube URL or Title"
 
-  h2 What is Machine Learning?
+  h2 #{@video.title}
 
   div id="content"
 
@@ -18,9 +21,7 @@ div id="container
         div.subtitle.subtitle-track-3 &nbsp;
         div.subtitle.subtitle-track-4 &nbsp;
 
-
-    video id="video" controls="controls" width=640 height=360
-      source src==@video.url
+    div id="video_div" width=640 height=360
 
     div id="sidebar"
       div.subtitle-title

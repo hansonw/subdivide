@@ -21,14 +21,37 @@ class VideosController < ApplicationController
   end
 
   def create
-    @video = Video.new do |v|
-      v.url = params[:url]
+    @video = nil
+    if params[:yt_url] != nil
+      require 'net/http'
+      require 'json'
+      yt_id = nil
+      # Figure out the video ID
+      URI.parse(params[:yt_url]).query.split("&").each do |q|
+        if q.index("v=") == 0
+          yt_id = q[2..q.length]
+          break
+        end
+      end
+      if yt_id.nil? == false
+        # Find the title from the YouTube api
+        api_uri = URI.parse('http://gdata.youtube.com/feeds/api/videos/' + yt_id)
+        api_uri.query = "alt=json&fields=title"
+        resp = Net::HTTP.get(api_uri)
+        json = JSON.parse(resp)
+        @video = Video.new do |v|
+          v.yt_url = yt_id
+          v.title = json["entry"]["title"]["$t"]
+        end
+      end
+    else
+      @video = Video.new do |v|
+        v.title = params[:title]
+        v.url = params[:url]
+      end
     end
     @video.save()
-    respond_to do |format|
-      format.xml  { render :xml => @video }
-      format.json { render :json => @video }
-    end
+    redirect_to "/videos/" + @video.id.to_s()
   end
 
   def show

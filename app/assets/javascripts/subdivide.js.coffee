@@ -29,10 +29,77 @@ class Util
     ms = Math.floor((time - Math.floor(time)) * 1000)
     return h + ':' + @pad(m, 2) + ':' + @pad(s, 2) + '.' + @pad(ms, 3)
 
+class HTML5Video
+  constructor: (@div, @url) ->
+    @video = $('<video id="video" controls="controls" width=640 height=360>')
+    @video.append($('<source src="' + @url + '">'))
+    @div.append(@video)
+
+  whenReady: (f) =>
+    @video.bind('durationchange', => f(@))
+
+  onTimeUpdate: (f) =>
+    @video.bind('timeupdate', f)
+
+  onSeek: (f) =>
+    @video.bind('seeking', f)
+
+  currentTime: =>
+    @video.prop('currentTime')
+
+  seekTo: (t) =>
+    @video.prop('currentTime', t)
+
+  duration: =>
+    @video.prop('duration')
+
+  width: =>
+    @video.prop('width')
+
+class YouTubeVideo
+  timeUpdateCallbacks: []
+  timeUpdateTimerID: null
+
+  constructor: (@div, @url) ->
+    params = { allowScriptAccess: "always" }
+    atts = { id: "video" }
+    swfobject.embedSWF("http://www.youtube.com/v/" + @url +
+                       "?version=3&enablejsapi=1&playerapiid=player1", 
+                       "video_div", "640", "360", "9", null, null, params, atts)
+
+  procStateChange: (@state) =>
+    @onSeekFunction()
+
+  timeUpdateTimer: =>
+    for cb in @timeUpdateCallbacks
+      cb()
+
+  onTimeUpdate: (f) =>
+    window.onYouTubeStateChange = @procStateChange
+    $("#video")[0].addEventListener("onStateChange", "onYouTubeStateChange")
+    @timeUpdateCallbacks.push(f)
+    if @timeUpdateTimerID == null
+      @timeUpdateTimerID = setInterval(@timeUpdateTimer, 100)
+
+  onSeek: (f) =>
+    @onSeekFunction = f
+
+  currentTime: =>
+    $("#video")[0].getCurrentTime()
+
+  seekTo: (t) =>
+    $("#video")[0].seekTo(t)
+
+  duration: =>
+    $("#video")[0].getDuration()
+
+  width: =>
+    $("#video").prop('width')
+
 class Cuepoint
   constructor: (@video) ->
     @last_active = {}
-    @video.bind("timeupdate", @_timeUpdate)
+    @video.onTimeUpdate(@_timeUpdate)
 
   _timeUpdate: =>
     @updateSubtitleDisplay()
@@ -41,9 +108,9 @@ class Cuepoint
     used = [false, false, false, false]
     active = {}
     first = true
-    currentTime = @video.prop('currentTime')
+    currentTime = @video.currentTime()
     for subtitle in window.subdivide.subtitles
-      if !subtitle.end_time || currentTime <= subtitle.end_time.time
+      if !subtitle.end_time || currentTime <= subtitle.end_time
         if currentTime >= subtitle.start_time - Util.EPSILON
           if first == true && !@last_active[subtitle.id]
             window.subdivide.selectActiveSubtitle(subtitle)
@@ -90,7 +157,7 @@ class Subtitle
   handleSkip: (event) =>
     event.stopPropagation()
     window.subdivide.setTime(
-      if @end_time == null then @start_time else @end_time.time)
+      if @end_time == null then @start_time else @end_time)
 
   handleDelete: =>
     @delete()
@@ -198,7 +265,7 @@ class Subdivide
   constructor: (@video, @time_points_div, @time_marker, @subtitle_edit_div, @scrollbar) ->
     $(document).keydown @procKeyDown
     $(document).keyup @procKeyUp
-    @barWidth = @video.prop('width') - 147
+    @barWidth = @video.width() - 147
     @zoomWidth = @barWidth + 1
     @zoomLevel = 0
     @time_points_div.css('width', @barWidth)
@@ -214,8 +281,8 @@ class Subdivide
     $('.zoomout').click({dir: -1}, @procZoom)
     $('.language_select').change(@initAgain)
     # Seeking the video should auto-scroll, always.
-    @video.bind('seeking', => @userScrolling = false)
-    @video.bind('timeupdate', @procTimeUpdate)
+    @video.onSeek(=> @userScrolling = false)
+    @video.onTimeUpdate(@procTimeUpdate)
     @subtitles = []
     @shift_pressed = false
     for i in [1..4]
@@ -238,12 +305,12 @@ class Subdivide
     @initJug()
 
   timeToPos: (time) =>
-    return Math.ceil(time / @video.prop('duration') * @zoomWidth) -
+    return Math.ceil(time / @video.duration() * @zoomWidth) -
       @scrollbar.data('jsp').getContentPositionX()
 
   posToTime: (pos) =>
     return (pos + @scrollbar.data('jsp').getContentPositionX()) / @zoomWidth *
-      @video.prop('duration')
+      @video.duration()
 
   updateTimeDivs: ->
     for sub in @subtitles
@@ -270,7 +337,7 @@ class Subdivide
           sub.time_div.css('width', w)
 
   updateTimeMarker: =>
-    @time_marker.css('left', @timeToPos(@video.prop('currentTime')))
+    @time_marker.css('left', @timeToPos(@video.currentTime()))
 
   addTimePoint: (voice, time, is_end) =>
     if is_end
@@ -334,11 +401,11 @@ class Subdivide
 
   setTime: (time) =>
     # Force a time update.
-    if Util.timeEqual(@video.prop('currentTime'), time)
+    if Util.timeEqual(@video.currentTime(), time)
       @userScrolling = false
       @procTimeUpdate()
     else
-      @video.prop('currentTime', time)
+      @video.seekTo(time)
 
   setActiveSubtitle: (sub) ->
     @selectActiveSubtitle(sub)
@@ -356,14 +423,14 @@ class Subdivide
     if event.keyCode == 16 # shift
       @shift_pressed = true
     else if event.keyCode >= voice_min && event.keyCode <= voice_max
-      @addTimePoint event.keyCode-voice_min, @video.prop('currentTime'), @shift_pressed
+      @addTimePoint event.keyCode-voice_min, @video.currentTime(), @shift_pressed
 
   procKeyUp: (event) =>
     if event.keyCode == 16 # shift
       @shift_pressed = false
 
   procControl: (event) =>
-    @addTimePoint(event.data.voice, @video.prop('currentTime'), event.data.type)
+    @addTimePoint(event.data.voice, @video.currentTime(), event.data.type)
 
   procMouseDown: (event) =>
 
@@ -410,7 +477,7 @@ class Subdivide
     @userScrolling = false
 
   procTimePointClick: (event) =>
-    @video.prop('currentTime', @posToTime(event.offsetX))
+    @video.seekTo(@posToTime(event.offsetX))
 
   procDrag: (event, ui) =>
     sub = event.data.subtitle
@@ -421,7 +488,7 @@ class Subdivide
     start = @posToTime(parseInt(sub.time_div.css('left')))
     end = if sub.end_time == null then start \
           else start + sub.end_time - sub.start_time
-    if start >= 0 && end <= @video.prop('duration')
+    if start >= 0 && end <= @video.duration()
       sub.start_time = start
       sub.end_time = end
       sub.update()
@@ -452,7 +519,7 @@ class Subdivide
       port: 80,
       transports: ['xhr-polling', 'jsonp-polling']
     })
-    jug.subscribe(channel_name_map[video_id], (data) =>
+    jug.subscribe(channel_name, (data) =>
       if data.type == 'update_subtitle'
         @procUpdateSubtitle(data.value)
       else if data.type == 'create_subtitle'
@@ -475,10 +542,17 @@ class Subdivide
     })
 
 $(document).ready(() ->
-  $('#video')[0].addEventListener('durationchange', () ->
-    window.subdivide = new Subdivide $('#video'), $('#time_points'), $('#time_marker'), $('#subtitle_edit'), $('#scrollbar')
+  init = (video) ->
+    window.subdivide = new Subdivide(video, $('#time_points'), $('#time_marker'), $('#subtitle_edit'), $('#scrollbar'))
     window.subdivide.init()
-    window.cuepoint = new Cuepoint $('#video')
-  )
+    window.cuepoint = new Cuepoint(video)
+  if url
+    video = new HTML5Video($("#video_div"), url)
+    video.whenReady(init)
+  else
+    video = null
+    window.onYouTubePlayerReady = (playerid) => init(video)
+    video = new YouTubeVideo($("#video_div"), yt_id)
+
   $('#help_close').click(-> $('#help').css('display', 'none'))
 )
