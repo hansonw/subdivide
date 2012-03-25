@@ -11,16 +11,28 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120325032525) do
+ActiveRecord::Schema.define(:version => 20120325212725) do
+
+  create_table "subtitle_track_sets", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "subtitle_tracks", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "subtitles", :force => true do |t|
     t.string   "text"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "video_id"
     t.integer  "voice"
     t.float    "start_time"
     t.float    "end_time"
+    t.integer  "subtitle_track_id"
   end
 
   create_table "videos", :force => true do |t|
