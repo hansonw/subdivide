@@ -31,7 +31,7 @@ class Util
 
 class HTML5Video
   constructor: (@div, @url) ->
-    @video = $('<video id="video" controls="controls" width=640 height=360>')
+    @video = $('<video id="video" width=640 height=360>')
     @video.append($('<source src="' + @url + '">'))
     @div.append(@video)
 
@@ -44,11 +44,26 @@ class HTML5Video
   onSeek: (f) =>
     @video.bind('seeking', f)
 
+  onEnd: (f) =>
+    @video.bind('ended', f)
+
   currentTime: =>
     @video.prop('currentTime')
 
   seekTo: (t) =>
     @video.prop('currentTime', t)
+
+  play: =>
+    @video[0].play()
+
+  pause: =>
+    @video[0].pause()
+
+  paused: =>
+    @video[0].paused || @video[0].ended
+
+  bufferedPercent: =>
+    return 100 * @video.prop('buffered').end(0) / @duration()
 
   duration: =>
     @video.prop('duration')
@@ -59,20 +74,27 @@ class HTML5Video
 class YouTubeVideo
   timeUpdateCallbacks: []
   timeUpdateTimerID: null
+  onEndFunction: null
 
   constructor: (@div, @url) ->
-    params = { allowScriptAccess: "always" }
+    @started = false
+    params = { allowScriptAccess: "always", wmode: "transparent" }
     atts = { id: "video" }
-    swfobject.embedSWF("http://www.youtube.com/v/" + @url +
-                       "?version=3&enablejsapi=1&playerapiid=player1", 
+    swfobject.embedSWF("http://www.youtube.com/apiplayer?video_id=" + @url +
+                       "&version=3&enablejsapi=1&playerapiid=player1", 
                        "video_div", "640", "360", "9", null, null, params, atts)
 
   procStateChange: (@state) =>
+    if @state == 0 && @onEndFunction != null
+      @onEndFunction()
     @onSeekFunction()
 
   timeUpdateTimer: =>
     for cb in @timeUpdateCallbacks
       cb()
+
+  onEnd: (f) =>
+    @onEndFunction = f
 
   onTimeUpdate: (f) =>
     window.onYouTubeStateChange = @procStateChange
@@ -89,6 +111,22 @@ class YouTubeVideo
 
   seekTo: (t) =>
     $("#video")[0].seekTo(t)
+    if !@started
+      @pause()
+
+  play: =>
+    @started = true
+    $("#video")[0].playVideo()
+
+  pause: =>
+    $("#video")[0].pauseVideo()
+
+  paused: =>
+    @state != 1
+
+  bufferedPercent: =>
+    return 100 * $("#video")[0].getVideoBytesLoaded() /
+      $("#video")[0].getVideoBytesTotal()
 
   duration: =>
     $("#video")[0].getDuration()
@@ -265,7 +303,7 @@ class Subdivide
   constructor: (@video, @time_points_div, @time_marker, @subtitle_edit_div, @scrollbar) ->
     $(document).keydown @procKeyDown
     $(document).keyup @procKeyUp
-    @barWidth = @video.width() - 147
+    @barWidth = @video.width() - 150
     @zoomWidth = @barWidth + 1
     @zoomLevel = 0
     @time_points_div.css('width', @barWidth)
@@ -546,6 +584,7 @@ $(document).ready(() ->
     window.subdivide = new Subdivide(video, $('#time_points'), $('#time_marker'), $('#subtitle_edit'), $('#scrollbar'))
     window.subdivide.init()
     window.cuepoint = new Cuepoint(video)
+    initializeControls(video)
   if url
     video = new HTML5Video($("#video_div"), url)
     video.whenReady(init)
