@@ -1,8 +1,5 @@
 javascript:
-  var video_id = #{@video.id};
-  var channel_name = '#{@video.uuid}';
-  var url = '#{@video.url}';
-  var yt_id = '#{@video.yt_url}';
+  video_info = #{{@video_json}};
 
 div id="container
   div id="header"

@@ -56,6 +56,7 @@ class VideosController < ApplicationController
 
   def show
     @video = Video.find(params[:id])
+    @video_json = @video.to_json
     respond_to do |format|
       format.html # show.html.slim
       format.xml  { render :xml => @video }

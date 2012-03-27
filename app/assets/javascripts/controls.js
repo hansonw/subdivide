@@ -15,7 +15,7 @@ var initializeControls = function(video){
   setTimeout(startBuffer, 150);
   
   //bind video events
-  $('#video_div')
+  $('#subtitle_container')
   .on('click', function() {
     $('.btnPlay').addClass('paused');
     $(this).unbind('click');

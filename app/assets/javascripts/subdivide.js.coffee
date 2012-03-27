@@ -234,7 +234,7 @@ class Subtitle
     dat.append($('<div />').addClass('subtitleText')
                            .prop('contenteditable', true)
                            .click(-> false)
-                           .css('color', if video_id == 2 then '#333' else '#999')
+                           .css('color', '#333')
                            .append(@text)
                            .keydown(@handleKeydown)
                            .blur(@handleTextEdit))
@@ -272,7 +272,7 @@ class Subtitle
     }
     jQuery.ajax({
         type: 'POST',
-        url: "/videos/" + video_id + '/subtitles.json',
+        url: "/videos/" + video_info.id + '/subtitles.json',
         data: data,
         success: @_onCreateSuccess
     })
@@ -286,7 +286,7 @@ class Subtitle
     }
     jQuery.ajax({
         type: 'PUT',
-        url: "/videos/" + video_id + '/subtitles/' + @id + '.json',
+        url: "/videos/" + video_info.id + '/subtitles/' + @id + '.json',
         data: data,
         success: @_onUpdateSuccess
     })
@@ -296,7 +296,7 @@ class Subtitle
     if @time_div then @time_div.remove()
     jQuery.ajax({
         type: 'DELETE',
-        url: "/videos/" + video_id + '/subtitles/' + @id + '.json',
+        url: "/videos/" + video_info.id + '/subtitles/' + @id + '.json',
     })
 
 class Subdivide
@@ -338,7 +338,6 @@ class Subdivide
       sub.div.remove()
       sub.time_div.remove()
     @subtitles = []
-    window.video_id = parseInt($('.language_select option:selected').prop('value'))
     @loadSubtitles()
     @initJug()
 
@@ -557,7 +556,7 @@ class Subdivide
       port: 80,
       transports: ['xhr-polling', 'jsonp-polling']
     })
-    jug.subscribe(channel_name, (data) =>
+    jug.subscribe(video_info.uuid, (data) =>
       if data.type == 'update_subtitle'
         @procUpdateSubtitle(data.value)
       else if data.type == 'create_subtitle'
@@ -572,7 +571,7 @@ class Subdivide
   loadSubtitles: =>
     jQuery.ajax({
         type: 'GET',
-        url: "/videos/" + video_id + '/subtitles.json',
+        url: "/videos/" + video_info.id + '/subtitles.json',
         success: (data) =>
           for value in data
             @procAddSubtitle(value)
@@ -585,13 +584,13 @@ $(document).ready(() ->
     window.subdivide.init()
     window.cuepoint = new Cuepoint(video)
     initializeControls(video)
-  if url
-    video = new HTML5Video($("#video_div"), url)
+  if video_info.url
+    video = new HTML5Video($("#video_div"), video_info.url)
     video.whenReady(init)
   else
     video = null
     window.onYouTubePlayerReady = (playerid) => init(video)
-    video = new YouTubeVideo($("#video_div"), yt_id)
+    video = new YouTubeVideo($("#video_div"), video_info.yt_url)
 
   $('#help_close').click(-> $('#help').css('display', 'none'))
 )

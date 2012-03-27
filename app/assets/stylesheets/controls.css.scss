@@ -47,6 +47,7 @@
 
 /* Progress bar */
 .progress {
+  z-index: 999;
   width:490px;
   height:10px;
   position:absolute;
