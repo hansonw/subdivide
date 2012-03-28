@@ -27,8 +27,9 @@ class Video < ActiveRecord::Base
   def self.get_active(num)
     Subtitle.all
             .find_all{|st| (st.updated_at > (Time.current() - 1800))}
+            .collect{|st| Video.find(st.subtitle_track.get_video_id())}
             .uniq()
-            .take(num).collect{|st| Video.find(st.subtitle_track.get_video_id())}
+            .take(num)
   end
 
   def sub_percent
