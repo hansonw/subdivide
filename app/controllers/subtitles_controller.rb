@@ -50,7 +50,6 @@ class SubtitlesController < ApplicationController
       s.text = params[:text]
       s.subtitle_track = Video.find(params[:video_id]).subtitle_track_set.first.subtitle_track.first
     end
-    y @subtitle
 
     status = 200
     if @subtitle.save()
