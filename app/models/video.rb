@@ -35,7 +35,9 @@ class Video < ActiveRecord::Base
     cur_start = 0
     cur_end = 0
     covered = 0
-    Subtitle.where(:video_id => id).order(:start_time).each do |sub|
+    Subtitle.all
+            .find_all{|st| (st.subtitle_track.get_video_id() == self.id)}
+            .sort{|a,b| a.start_time <=> b.start_time}.each do |sub|
       if sub.start_time > cur_end + 0.3
         covered += cur_end - cur_start
         cur_start = sub.start_time
