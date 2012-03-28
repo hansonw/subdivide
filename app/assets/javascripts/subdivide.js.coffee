@@ -579,18 +579,18 @@ class Subdivide
     })
 
 $(document).ready(() ->
-  init = (video) ->
-    window.subdivide = new Subdivide(video, $('#time_points'), $('#time_marker'), $('#subtitle_edit'), $('#scrollbar'))
-    window.subdivide.init()
-    window.cuepoint = new Cuepoint(video)
-    initializeControls(video)
-  if video_info.url
-    video = new HTML5Video($("#video_div"), video_info.url)
-    video.whenReady(init)
-  else
-    video = null
-    window.onYouTubePlayerReady = (playerid) => init(video)
-    video = new YouTubeVideo($("#video_div"), video_info.yt_url)
-
-  $('#help_close').click(-> $('#help').css('display', 'none'))
+  if $("#video_div").length
+    init = (video) ->
+      window.subdivide = new Subdivide(video, $('#time_points'), $('#time_marker'), $('#subtitle_edit'), $('#scrollbar'))
+      window.subdivide.init()
+      window.cuepoint = new Cuepoint(video)
+      initializeControls(video)
+    if video_info.url
+      video = new HTML5Video($("#video_div"), video_info.url)
+      video.whenReady(init)
+    else
+      video = null
+      window.onYouTubePlayerReady = (playerid) => init(video)
+      video = new YouTubeVideo($("#video_div"), video_info.yt_url)
+    $('#help_close').click(-> $('#help').css('display', 'none'))
 )

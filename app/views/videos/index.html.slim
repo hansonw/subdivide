@@ -1,6 +1,30 @@
-- unless @videos.empty?
-  ul
-    - for video in @videos do
-      li
-        a href="#{url_for video}"
-          | Video #{video.id} ( #{video.url} )
+#videoContainer.div
+  #header.div
+    a href="/videos"
+      img src="#{asset_path('logo.png')}" alt="subdivide" title="subdivide"
+    form.search_bar method="post" action="/videos"
+      input.text name="yt_url" placeholder="Enter YouTube URL or Title"
+      | &nbsp;
+      input type="submit" name="search" value="Search"
+
+  - for heading, videos in @categories do
+    h2.heading = heading
+    ul.videoList
+      - if videos.length == 0
+        li.videoBox No videos at the moment :(
+      - else
+        - for video in videos[0..3] do
+          li.videoBox
+            a href="/videos/#{video.id}"
+              img.videoThumbnail src="#{video.thumbnail}" width=160 height=120
+            div.videoInfo
+              div.videoTitle #{video.title}
+              - unless video.uploader.nil?
+                div.videoUploader
+                  | Uploaded by 
+                  a href="http://www.youtube.com/user/#{video.uploader}" #{video.uploader}
+              div.videoDesc #{truncate(video.desc, :length => 100)}
+              div.videoSubPercent
+                | #{"%.2f" % video.sub_percent()}% subbed
+              div.videoViews
+                | Views: #{video.views}

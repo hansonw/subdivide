@@ -1,6 +1,14 @@
 class VideosController < ApplicationController
   def index
-    @videos = Video.all
+    @top_videos = Video.order("views desc").limit(10)
+    @active_videos = Video.get_active(20) #- @top_videos
+    @unsub_videos = Video.get_unsubbed(30)
+
+    @categories = {
+      "What's Hot" => @top_videos,
+      "Currently being subtitled" => @active_videos,
+      "Subtitle me!" => @unsub_videos
+    }
     respond_to do |format|
       format.html # index.html.slim
       format.xml  { render :xml => @videos }

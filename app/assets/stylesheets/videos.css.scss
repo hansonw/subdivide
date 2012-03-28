@@ -1,3 +1,45 @@
 // Place all the styles related to the videos controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+#videoContainer {
+  max-width: 1024px;
+  padding-left: 30px;
+  margin: 0 auto;
+}
+
+ul.videoList {
+  float: left;
+  list-style: none;
+  margin-top: 0;
+  padding: 0;
+  width: 100%;
+  .videoBox {
+    float: left;
+    position: relative;
+    margin: 10px;
+    width: 480px;
+    list-style: none;
+    .videoThumbnail {
+    }
+    .videoInfo {
+      position: absolute;
+      left: 160px;
+      top: 0px;
+      margin-left: 10px;
+      font-size: 14px;
+      .videoTitle {
+        font-weight: bold;
+      }
+      .videoUploader {
+      }
+      .videoDesc {
+        font-size: 12px;
+        color: #666;
+        margin: 5px 0 5px;
+      }
+      .videoViews {
+      }
+    }
+  }
+}
