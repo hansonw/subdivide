@@ -1,11 +1,31 @@
 class SubtitlesController < ApplicationController
+  def time_to_str(time)
+    ms = time - time.to_i
+    s = time.to_i % 60
+    m = time.to_i / 60 % 60
+    h = time.to_i / 60 / 60
+    return sprintf("%d:%02d:%02d.%03d", h, m, s, ms*1000)
+  end
   def index
-    y params
-    @subtitles = Video.find(params[:video_id]).subtitle
+    @video = Video.find(params[:video_id])
+    y @video
+    @subtitles = @video.subtitle
     respond_to do |format|
       format.html # index.html.slim
       format.xml  { render :xml => @subtitles }
       format.json { render :json => @subtitles }
+      format.sub do
+        data = ''
+        @subtitles.sort_by{|s| s.start_time}.each do |s|
+          data += time_to_str(s.start_time)
+          data += "," + time_to_str(s.end_time)
+          data += "\n"
+          data += s.text + "\n"
+        end
+        send_data data,
+                  :filename => @video.title.gsub(/[^a-zA-Z0-9]/, '') + '.sub',
+                  :type => 'text/plain'
+      end
     end
   end
 

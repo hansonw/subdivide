@@ -1,0 +1,108 @@
+/*** VIDEO CONTROLS CSS ***/
+/* control holder */
+.videoControl{
+  background:#333;
+  color:#ccc;
+  position:absolute;
+  top:360px;
+  width:640px;
+}
+.videoControl div.btn {
+  float:left;
+  width:34px;
+  height:30px;
+  padding: 0 5px;
+  cursor:pointer;
+}
+.videoControl div.text{
+  font-size:12px;
+  font-weight:bold;
+  line-height:30px;
+  text-align:center;
+  width:20px;
+  border:none;
+  color:#777;
+}
+.videoControl div.btnPlay{
+  background:url(control.png) no-repeat 0 0;
+}
+.videoControl div.paused{
+  background:url(control.png) no-repeat 0 -30px;
+}
+.videoControl div.selected{
+  font-size:15px;
+  color:#ccc;
+}
+.videoControl div.sound{
+  background:url(control.png) no-repeat -88px -30px;
+  border:none;
+  float:right;
+}
+.videoControl div.sound2{
+  background:url(control.png) no-repeat -88px -60px !important;
+}
+.videoControl div.muted{
+  background:url(control.png) no-repeat -88px 0 !important;
+}
+
+/* Progress bar */
+.progress {
+  z-index: 999;
+  width:490px;
+  height:10px;
+  position:absolute;
+  left: 40px;
+  top: 10px;
+  cursor:pointer;
+  background: #444; /* fallback */
+}
+.progress span {
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  display:block;
+}
+.timeBar{
+  z-index:10;
+  width:0;
+  background: #3FB7FC; /* fallback */
+}
+.bufferBar{
+  z-index:5;
+  width:0;
+  background: #777;
+}
+/* time and duration */
+.time{
+  position: absolute;
+  left: 550px;
+  top: 8px;
+  text-align:center;
+  font-size:11px;
+  line-height:12px;
+}
+
+.time .current {
+  color: white;
+}
+
+/* volume bar */
+.volume{
+  position:relative;
+  cursor:pointer;
+  width:70px;
+  height:10px;
+  float:right;
+  margin-top:10px;
+  margin-right:10px;
+}
+.volumeBar{
+  display:block;
+  height:100%;
+  position:absolute;
+  top:0;
+  left:0;
+  background-color:#eee;
+  z-index:10;
+}

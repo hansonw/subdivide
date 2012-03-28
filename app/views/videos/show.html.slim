@@ -1,36 +1,50 @@
 javascript:
-  var video_id = #{@video.id};
-  var channel_name_map = {2: '#{@video.uuid}', 3: '#{Video.find(3).uuid}'};
+  video_info = #{{@video_json}};
 
-div id="container
-  div id="header"
-    img src="#{asset_path('logo.png')}" alt="subdivide" title="subdivide"
-    input class="search_bar" placeholder="Enter YouTube URL or Title"
+#container.div
+  #header.div
+    a href="/videos"
+      img src="#{asset_path('logo.png')}" alt="subdivide" title="subdivide"
+    form.search_bar method="post" action="/videos"
+      input.text name="yt_url" placeholder="Enter YouTube URL or Title"
+      | &nbsp;
+      input type="submit" name="search" value="Search"
 
-  h2 What is Machine Learning?
+  h2 #{@video.title}
 
-  div id="content"
+  #content.div
 
-    div id="subtitle_container"
-      div id="subtitle_view"
+    #subtitle_container.div
+      #subtitle_view.div
         div.subtitle.subtitle-track-1 &nbsp;
         div.subtitle.subtitle-track-2 &nbsp;
         div.subtitle.subtitle-track-3 &nbsp;
         div.subtitle.subtitle-track-4 &nbsp;
 
+    #video_div.div width=640 height=360
+    div.videoControl
+      div.btnPlay.btn
+      div.progress
+        span.bufferBar
+        span.timeBar
+      div.time
+        span.current
+        | &nbsp; / &nbsp;
+        span.duration
+      // div class="sound sound2 btn" title="Mute/Unmute sound"
 
-    video id="video" controls="controls" width=640 height=360
-      source src==@video.url
-
-    div id="sidebar"
+    #sidebar.div
       div.subtitle-title
         span Subtitles
-        select.language_select
+        select#language-select
           option value="2" English
           option value="3" Français (Canada)
-      div id="subtitle_edit"
+      #subtitle_edit.div
+      #import_export.div
+        input id="import_sub" type="button" value="Import..."
+        input id="export_sub" type="button" value="Export to .sub..."
 
-    div id="time_points"
+    #time_points.div
       div.slider-box
         div.time-marker id="time_marker" &nbsp;
       - for i in 1..4 do
@@ -40,17 +54,17 @@ div id="container
             span.start start
             | &nbsp;
             span.stop stop
-      div id="scrollbar"
-        div id="fakeContent" 
+      #scrollbar.div
+        #fakeContent.div 
          | &nbsp;
-      div id="scroll-controls"
+      #scroll-controls.div
         span.zoomin +
         | &nbsp;
         span.zoomout -
 
-    div id="help"
+    #help.div
       h3 How do I use this?
-      div id="help_close" &times;
+      #help_close.div &times;
       | Use keys 1-4 to begin a subtitle at the current position.
       br
       | Press Shift+1 / Shift+2 .. to end the current subtitle.

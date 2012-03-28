@@ -41,4 +41,4 @@ gem 'seed-fu'
 gem 'slim'
 gem 'juggernaut'
 gem 'uuidtools'
-
+gem 'yaml_db'
