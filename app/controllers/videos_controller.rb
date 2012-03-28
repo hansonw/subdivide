@@ -70,6 +70,18 @@ class VideosController < ApplicationController
     end
     @video.views = 0
     @video.save()
+    @subtitletrackset = SubtitleTrackSet.new do |sts|
+      sts.title = "English"
+      sts.video = @video
+    end
+    @subtitletrackset.save()
+    (1..4).each do |i|
+      @subtitletrack = SubtitleTrack.new do |st|
+        st.title = i.to_s
+        st.subtitle_track_set = @subtitletrackset
+      end
+      @subtitletrack.save()
+    end
     redirect_to "/videos/" + @video.id.to_s()
   end
 
