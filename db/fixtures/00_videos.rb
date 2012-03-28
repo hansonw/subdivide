@@ -15,3 +15,25 @@ Video.seed(
   {"created_at"=>"2012-03-28T03:26:22Z", "desc"=>"These speed tests were filmed at actual web page rendering times. If you're interested in the technical details, read on!\r\n\r\nEquipment used: \r\n\r\n- Computer: MacBook Pro laptop with Windows installed\r\n-", "duration"=>130, "id"=>22, "thumbnail"=>"http://i.ytimg.com/vi/nCgQDjiotG0/0.jpg", "title"=>"Google Chrome Speed Tests", "updated_at"=>"2012-03-28T03:26:22Z", "uploader"=>"googlechrome", "url"=>nil, "uuid"=>"28ba7408-3755-4edc-8b33-08083517f559", "views"=>1, "yt_url"=>"nCgQDjiotG0"}
 )
 
+Video.each do |v|
+  SubtitleTrackSet.seed do |sts|
+    sts.id = 4*v.id
+    sts.title = "English"
+    sts.video_id = v.id
+  end
+  SubtitleTrackSet.seed do |sts|
+    sts.id = (4*v.id)+1
+    sts.title = "French"
+    sts.video_id = v.id
+  end
+end
+
+SubtitleTrackSet.each do |sts|
+  (1..4).each do |track_no|
+    SubtitleTrack.seed do |st|
+      st.id = ((4*sts.id)+track_no)
+      st.title = track_no.to_s
+      st.subtitle_track_set_id = sts.id
+    end
+  end
+end
