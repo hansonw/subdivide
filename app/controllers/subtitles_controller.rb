@@ -42,19 +42,20 @@ class SubtitlesController < ApplicationController
   end
 
   def create
+    @video = Video.find(params[:video_id])
     @subtitle = Subtitle.new do |s|
       s.video_id = params[:video_id]
       s.voice = params[:voice]
       s.start_time = params[:start_time]
       s.end_time = params[:end_time] == 'null' ? nil : params[:end_time]
       s.text = params[:text]
-      s.subtitle_track = Video.find(params[:video_id]).subtitle_track_set.first.subtitle_track.first
+      s.subtitle_track = @video.subtitle_track_set.first.subtitle_track.first
     end
 
     status = 200
     if @subtitle.save()
       data = {:type => 'create_subtitle', :value => @subtitle}
-      Juggernaut.publish(@subtitle.video.uuid, data)
+      Juggernaut.publish(@video.uuid, data)
     else
       status = 400
     end
@@ -76,6 +77,7 @@ class SubtitlesController < ApplicationController
 
   def update
     @subtitle = Subtitle.find(params[:id])
+    @video = Video.find(subtitle.subtitle_track.get_video_id())
     @subtitle.start_time = params[:start_time]
     @subtitle.end_time = params[:end_time] == 'null' ? nil : params[:end_time]
     @subtitle.text = params[:text]
@@ -83,11 +85,11 @@ class SubtitlesController < ApplicationController
     status = 200
     if @subtitle.save()
       data = {:type => 'update_subtitle', :value => @subtitle}
-      Juggernaut.publish(@subtitle.video.uuid, data)
+      Juggernaut.publish(@video.uuid, data)
     else
       status = 400
       data = {:type => 'update_subtitle', :value => Subtitle.find(params[:id])}
-      Juggernaut.publish(@subtitle.video.uuid, data)
+      Juggernaut.publish(@video.uuid, data)
     end
 
     respond_to do |format|
@@ -98,10 +100,11 @@ class SubtitlesController < ApplicationController
 
   def destroy
     @subtitle = Subtitle.find(params[:id])
+    @video = Video.find(subtitle.subtitle_track.get_video_id())
     if @subtitle.nil? == false
       Subtitle.destroy(params[:id])
       data = {:type => 'delete_subtitle', :value => params[:id]}
-      Juggernaut.publish(@subtitle.video.uuid, data)
+      Juggernaut.publish(@video.uuid, data)
     end
     @response = [:destroy => 'destroy']
     respond_to do |format|
