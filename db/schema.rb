@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120327235210) do
+ActiveRecord::Schema.define(:version => 20120328130414) do
 
   create_table "subtitle_track_sets", :force => true do |t|
     t.string   "title"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20120327235210) do
     t.float    "start_time"
     t.float    "end_time"
     t.integer  "subtitle_track_id"
+    t.integer  "video_id"
   end
 
   create_table "videos", :force => true do |t|
