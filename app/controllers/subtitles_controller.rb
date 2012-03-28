@@ -50,6 +50,7 @@ class SubtitlesController < ApplicationController
       s.start_time = params[:start_time]
       s.end_time = params[:end_time] == 'null' ? nil : params[:end_time]
       s.text = params[:text]
+      s.subtitle_track = Video.find(params[:video_id]).subtitle_track_set.first.subtitle_track.first
     end
     y @subtitle
 
