@@ -25,4 +25,4 @@
                   a href="http://www.youtube.com/user/#{video.uploader}" #{video.uploader}
               div.videoDesc #{truncate(video.desc, :length => 100)}
               div.videoViews
-                | Views: #{video.views} / #{"%.2f" % video.sub_percent()}% subbed
+                | #{video.views} views / #{"%.2f" % video.sub_percent()}% subbed

@@ -317,7 +317,7 @@ class Subdivide
     @userScrolling = false
     $('.zoomin').click({dir: 1}, @procZoom)
     $('.zoomout').click({dir: -1}, @procZoom)
-    $('.language_select').change(@initAgain)
+    $('#language-select').change(@initAgain)
     # Seeking the video should auto-scroll, always.
     @video.onSeek(=> @userScrolling = false)
     @video.onTimeUpdate(@procTimeUpdate)
@@ -338,6 +338,9 @@ class Subdivide
       sub.div.remove()
       sub.time_div.remove()
     @subtitles = []
+    t = window.video_info
+    window.video_info = window.alt_video_info
+    window.alt_video_info = t
     @loadSubtitles()
     @initJug()
 

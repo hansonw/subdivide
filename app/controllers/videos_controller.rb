@@ -1,6 +1,6 @@
 class VideosController < ApplicationController
   def index
-    @top_videos = Video.order("views desc").limit(10)
+    @top_videos = Video.where("thumbnail != ''").order("views desc").limit(10)
     @active_videos = Video.get_active(20) #- @top_videos
     @unsub_videos = Video.get_unsubbed(30)
 
@@ -77,6 +77,10 @@ class VideosController < ApplicationController
     @video = Video.find(params[:id])
     if !@video.nil?
       @video_json = @video.to_json
+      @alt_video_json = 'null';
+      if @video.id == 2
+        @alt_video_json = Video.find(25).to_json
+      end
       if @video.views.nil?
         @video.views = 0
       end

@@ -18,7 +18,7 @@ class Video < ActiveRecord::Base
   end
 
   def self.get_unsubbed(num)
-    return Video.all()
+    return Video.where("thumbnail != ''")
                 .find_all{|v| v.sub_percent < 50}
                 .sort_by{rand}
                 .take(num)
