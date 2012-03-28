@@ -30,4 +30,8 @@ class Subtitle < ActiveRecord::Base
       errors.add(:start_time, 'subtitle must not overlap other subtitle')
     end
   end
+
+  def get_video_id
+    return subtitle_track.get_video_id()
+  end
 end
