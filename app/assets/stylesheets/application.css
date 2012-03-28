@@ -269,7 +269,7 @@ h3 {
   width: 400px; 
 }
 
-.language_select {
+#language-select {
   float: right;
   margin: 0 0 -1px 0;
   padding: 0;
