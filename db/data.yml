@@ -1,0 +1,1011 @@
+
+---
+subtitle_tracks:
+  columns:
+  - id
+  - title
+  - created_at
+  - updated_at
+  - subtitle_track_set_id
+  records: 
+  - - '33'
+    - '1'
+    - '2012-03-28 13:03:12.719926'
+    - '2012-03-28 13:03:12.719926'
+    - '8'
+  - - '34'
+    - '2'
+    - '2012-03-28 13:03:12.725851'
+    - '2012-03-28 13:03:12.725851'
+    - '8'
+  - - '35'
+    - '3'
+    - '2012-03-28 13:03:12.729678'
+    - '2012-03-28 13:03:12.729678'
+    - '8'
+  - - '36'
+    - '4'
+    - '2012-03-28 13:03:12.732934'
+    - '2012-03-28 13:03:12.732934'
+    - '8'
+  - - '37'
+    - '1'
+    - '2012-03-28 13:03:12.736165'
+    - '2012-03-28 13:03:12.736165'
+    - '9'
+  - - '38'
+    - '2'
+    - '2012-03-28 13:03:12.74007'
+    - '2012-03-28 13:03:12.74007'
+    - '9'
+  - - '39'
+    - '3'
+    - '2012-03-28 13:03:12.743529'
+    - '2012-03-28 13:03:12.743529'
+    - '9'
+  - - '40'
+    - '4'
+    - '2012-03-28 13:03:12.746865'
+    - '2012-03-28 13:03:12.746865'
+    - '9'
+  - - '257'
+    - '1'
+    - '2012-03-28 13:03:12.750067'
+    - '2012-03-28 13:03:12.750067'
+    - '64'
+  - - '258'
+    - '2'
+    - '2012-03-28 13:03:12.753412'
+    - '2012-03-28 13:03:12.753412'
+    - '64'
+  - - '259'
+    - '3'
+    - '2012-03-28 13:03:12.756561'
+    - '2012-03-28 13:03:12.756561'
+    - '64'
+  - - '260'
+    - '4'
+    - '2012-03-28 13:03:12.759727'
+    - '2012-03-28 13:03:12.759727'
+    - '64'
+  - - '261'
+    - '1'
+    - '2012-03-28 13:03:12.762887'
+    - '2012-03-28 13:03:12.762887'
+    - '65'
+  - - '262'
+    - '2'
+    - '2012-03-28 13:03:12.765953'
+    - '2012-03-28 13:03:12.765953'
+    - '65'
+  - - '263'
+    - '3'
+    - '2012-03-28 13:03:12.769045'
+    - '2012-03-28 13:03:12.769045'
+    - '65'
+  - - '264'
+    - '4'
+    - '2012-03-28 13:03:12.772118'
+    - '2012-03-28 13:03:12.772118'
+    - '65'
+  - - '289'
+    - '1'
+    - '2012-03-28 13:03:12.775146'
+    - '2012-03-28 13:03:12.775146'
+    - '72'
+  - - '290'
+    - '2'
+    - '2012-03-28 13:03:12.778424'
+    - '2012-03-28 13:03:12.778424'
+    - '72'
+  - - '291'
+    - '3'
+    - '2012-03-28 13:03:12.781483'
+    - '2012-03-28 13:03:12.781483'
+    - '72'
+  - - '292'
+    - '4'
+    - '2012-03-28 13:03:12.785345'
+    - '2012-03-28 13:03:12.785345'
+    - '72'
+  - - '293'
+    - '1'
+    - '2012-03-28 13:03:12.788415'
+    - '2012-03-28 13:03:12.788415'
+    - '73'
+  - - '294'
+    - '2'
+    - '2012-03-28 13:03:12.791624'
+    - '2012-03-28 13:03:12.791624'
+    - '73'
+  - - '295'
+    - '3'
+    - '2012-03-28 13:03:12.794723'
+    - '2012-03-28 13:03:12.794723'
+    - '73'
+  - - '296'
+    - '4'
+    - '2012-03-28 13:03:12.797633'
+    - '2012-03-28 13:03:12.797633'
+    - '73'
+  - - '305'
+    - '1'
+    - '2012-03-28 13:03:12.801048'
+    - '2012-03-28 13:03:12.801048'
+    - '76'
+  - - '306'
+    - '2'
+    - '2012-03-28 13:03:12.804407'
+    - '2012-03-28 13:03:12.804407'
+    - '76'
+  - - '307'
+    - '3'
+    - '2012-03-28 13:03:12.807553'
+    - '2012-03-28 13:03:12.807553'
+    - '76'
+  - - '308'
+    - '4'
+    - '2012-03-28 13:03:12.810753'
+    - '2012-03-28 13:03:12.810753'
+    - '76'
+  - - '309'
+    - '1'
+    - '2012-03-28 13:03:12.81386'
+    - '2012-03-28 13:03:12.81386'
+    - '77'
+  - - '310'
+    - '2'
+    - '2012-03-28 13:03:12.816973'
+    - '2012-03-28 13:03:12.816973'
+    - '77'
+  - - '311'
+    - '3'
+    - '2012-03-28 13:03:12.82028'
+    - '2012-03-28 13:03:12.82028'
+    - '77'
+  - - '312'
+    - '4'
+    - '2012-03-28 13:03:12.823413'
+    - '2012-03-28 13:03:12.823413'
+    - '77'
+  - - '321'
+    - '1'
+    - '2012-03-28 13:03:12.826501'
+    - '2012-03-28 13:03:12.826501'
+    - '80'
+  - - '322'
+    - '2'
+    - '2012-03-28 13:03:12.829678'
+    - '2012-03-28 13:03:12.829678'
+    - '80'
+  - - '323'
+    - '3'
+    - '2012-03-28 13:03:12.832957'
+    - '2012-03-28 13:03:12.832957'
+    - '80'
+  - - '324'
+    - '4'
+    - '2012-03-28 13:03:12.836093'
+    - '2012-03-28 13:03:12.836093'
+    - '80'
+  - - '325'
+    - '1'
+    - '2012-03-28 13:03:12.839916'
+    - '2012-03-28 13:03:12.839916'
+    - '81'
+  - - '326'
+    - '2'
+    - '2012-03-28 13:03:12.843627'
+    - '2012-03-28 13:03:12.843627'
+    - '81'
+  - - '327'
+    - '3'
+    - '2012-03-28 13:03:12.846843'
+    - '2012-03-28 13:03:12.846843'
+    - '81'
+  - - '328'
+    - '4'
+    - '2012-03-28 13:03:12.849893'
+    - '2012-03-28 13:03:12.849893'
+    - '81'
+  - - '337'
+    - '1'
+    - '2012-03-28 13:03:12.853008'
+    - '2012-03-28 13:03:12.853008'
+    - '84'
+  - - '338'
+    - '2'
+    - '2012-03-28 13:03:12.856016'
+    - '2012-03-28 13:03:12.856016'
+    - '84'
+  - - '339'
+    - '3'
+    - '2012-03-28 13:03:12.859309'
+    - '2012-03-28 13:03:12.859309'
+    - '84'
+  - - '340'
+    - '4'
+    - '2012-03-28 13:03:12.862416'
+    - '2012-03-28 13:03:12.862416'
+    - '84'
+  - - '341'
+    - '1'
+    - '2012-03-28 13:03:12.865424'
+    - '2012-03-28 13:03:12.865424'
+    - '85'
+  - - '342'
+    - '2'
+    - '2012-03-28 13:03:12.868477'
+    - '2012-03-28 13:03:12.868477'
+    - '85'
+  - - '343'
+    - '3'
+    - '2012-03-28 13:03:12.871462'
+    - '2012-03-28 13:03:12.871462'
+    - '85'
+  - - '344'
+    - '4'
+    - '2012-03-28 13:03:12.875709'
+    - '2012-03-28 13:03:12.875709'
+    - '85'
+  - - '353'
+    - '1'
+    - '2012-03-28 13:03:12.879321'
+    - '2012-03-28 13:03:12.879321'
+    - '88'
+  - - '354'
+    - '2'
+    - '2012-03-28 13:03:12.883236'
+    - '2012-03-28 13:03:12.883236'
+    - '88'
+  - - '355'
+    - '3'
+    - '2012-03-28 13:03:12.886807'
+    - '2012-03-28 13:03:12.886807'
+    - '88'
+  - - '356'
+    - '4'
+    - '2012-03-28 13:03:12.890053'
+    - '2012-03-28 13:03:12.890053'
+    - '88'
+  - - '357'
+    - '1'
+    - '2012-03-28 13:03:12.893187'
+    - '2012-03-28 13:03:12.893187'
+    - '89'
+  - - '358'
+    - '2'
+    - '2012-03-28 13:03:12.896248'
+    - '2012-03-28 13:03:12.896248'
+    - '89'
+  - - '359'
+    - '3'
+    - '2012-03-28 13:03:12.899902'
+    - '2012-03-28 13:03:12.899902'
+    - '89'
+  - - '360'
+    - '4'
+    - '2012-03-28 13:03:12.903448'
+    - '2012-03-28 13:03:12.903448'
+    - '89'
+
+---
+subtitle_track_sets:
+  columns:
+  - id
+  - title
+  - created_at
+  - updated_at
+  - video_id
+  records: 
+  - - '8'
+    - English
+    - '2012-03-28 13:03:12.608901'
+    - '2012-03-28 13:03:12.608901'
+    - '2'
+  - - '9'
+    - French
+    - '2012-03-28 13:03:12.614924'
+    - '2012-03-28 13:03:12.614924'
+    - '2'
+  - - '64'
+    - English
+    - '2012-03-28 13:03:12.618398'
+    - '2012-03-28 13:03:12.618398'
+    - '16'
+  - - '65'
+    - French
+    - '2012-03-28 13:03:12.621716'
+    - '2012-03-28 13:03:12.621716'
+    - '16'
+  - - '72'
+    - English
+    - '2012-03-28 13:03:12.624803'
+    - '2012-03-28 13:03:12.624803'
+    - '18'
+  - - '73'
+    - French
+    - '2012-03-28 13:03:12.627988'
+    - '2012-03-28 13:03:12.627988'
+    - '18'
+  - - '76'
+    - English
+    - '2012-03-28 13:03:12.631125'
+    - '2012-03-28 13:03:12.631125'
+    - '19'
+  - - '77'
+    - French
+    - '2012-03-28 13:03:12.634152'
+    - '2012-03-28 13:03:12.634152'
+    - '19'
+  - - '80'
+    - English
+    - '2012-03-28 13:03:12.637204'
+    - '2012-03-28 13:03:12.637204'
+    - '20'
+  - - '81'
+    - French
+    - '2012-03-28 13:03:12.640181'
+    - '2012-03-28 13:03:12.640181'
+    - '20'
+  - - '84'
+    - English
+    - '2012-03-28 13:03:12.643294'
+    - '2012-03-28 13:03:12.643294'
+    - '21'
+  - - '85'
+    - French
+    - '2012-03-28 13:03:12.646363'
+    - '2012-03-28 13:03:12.646363'
+    - '21'
+  - - '88'
+    - English
+    - '2012-03-28 13:03:12.649335'
+    - '2012-03-28 13:03:12.649335'
+    - '22'
+  - - '89'
+    - French
+    - '2012-03-28 13:03:12.652434'
+    - '2012-03-28 13:03:12.652434'
+    - '22'
+
+---
+videos:
+  columns:
+  - id
+  - url
+  - created_at
+  - updated_at
+  - uuid
+  - title
+  - yt_url
+  - thumbnail
+  - uploader
+  - desc
+  - duration
+  - views
+  records: 
+  - - '2'
+    - //iterate.ca/video.webm
+    - '2012-01-07 22:34:09'
+    - '2012-03-28 13:39:39.528449'
+    - dfae471f-781b-4cfb-9829-bca4e1d1c118
+    - What is Machine Learning?
+    - !!null 
+    - /assets/ml-thumbnail.png
+    - !!null 
+    - An introductory lecture from Stanford's AI online course.
+    - '434'
+    - '68'
+  - - '16'
+    - !!null 
+    - '2012-03-28 00:14:50'
+    - '2012-03-28 04:07:24'
+    - affe008b-c092-4931-9851-0647d34b34d3
+    - improvisation no93 - The Inverted Keyboard
+    - 6OVkiQ_3dmQ
+    - http://i.ytimg.com/vi/6OVkiQ_3dmQ/0.jpg
+    - kylelandry
+    - ! 'http://kylelandry.com
+
+      http://facebook.com/kylelandrypiano
+
+      http://twitter.com/kylelandrypiano
+
+
+      Thought this specific challenge was the best so I tried it out.  It was pretty
+      difficult! Also, if anyone w'
+    - '279'
+    - '1'
+  - - '18'
+    - !!null 
+    - '2012-03-28 02:52:33'
+    - '2012-03-28 04:10:11'
+    - 68d32e67-1dba-448b-8f07-ab095f91c29e
+    - Ten Thousand 2D Random Walks
+    - NBdBFQbsfmc
+    - http://i.ytimg.com/vi/NBdBFQbsfmc/0.jpg
+    - daveagp
+    - ! 'This is a video of 10000 particles taking random walks in two dimensions.
+      At each time step, every particle moves 1 unit in a random direction. The spreadsheet
+      is from excelunusual.com.
+
+
+      You can see in'
+    - '125'
+    - '2'
+  - - '19'
+    - !!null 
+    - '2012-03-28 02:52:48'
+    - '2012-03-28 02:52:48'
+    - 738a838f-9239-4917-8435-d9b98a2dbd38
+    - ! 'BBC Horizon: Do you see what I see? "The Himba tribe"'
+    - 4b71rT9fU-I
+    - http://i.ytimg.com/vi/4b71rT9fU-I/0.jpg
+    - TheNeekerirotta
+    - ! 'All rights owned by BBC.
+
+
+      This is the most essential part of the documentary, whether people see colors
+      differently or not.'
+    - '476'
+    - '40'
+  - - '20'
+    - !!null 
+    - '2012-03-28 02:53:07'
+    - '2012-03-28 02:53:07'
+    - 4f9f9349-aa09-499e-8568-4c63852a4f14
+    - President Obama Speaks at Hankuk University
+    - 78JPYA7fqzQ
+    - http://i.ytimg.com/vi/78JPYA7fqzQ/0.jpg
+    - whitehouse
+    - President Obama speaks to faculty, staff and students of Hankuk University in
+      Seoul about global progress toward nuclear non-proliferation. March 26, 2012.
+    - '1778'
+    - '50'
+  - - '21'
+    - !!null 
+    - '2012-03-28 02:55:03'
+    - '2012-03-28 02:55:03'
+    - b99d0cdb-5463-423b-b752-016bbbf9b6ca
+    - Winter Arena Highlights - Day 3 - DRG vs MKP
+    - 0k42BaHsrVE
+    - http://i.ytimg.com/vi/0k42BaHsrVE/0.jpg
+    - MajorLeagueGaming
+    - Highlights from the match between DRG and MKP from Day 3 of the Winter Arena
+      Central stream.
+    - '783'
+    - '45'
+  - - '22'
+    - !!null 
+    - '2012-03-28 03:26:22'
+    - '2012-03-28 03:26:22'
+    - 28ba7408-3755-4edc-8b33-08083517f559
+    - Google Chrome Speed Tests
+    - nCgQDjiotG0
+    - http://i.ytimg.com/vi/nCgQDjiotG0/0.jpg
+    - googlechrome
+    - ! "These speed tests were filmed at actual web page rendering times. If you're
+      interested in the technical details, read on!\r\n\r\nEquipment used: \r\n\r\n-
+      Computer: MacBook Pro laptop with Windows installed\r\n-"
+    - '130'
+    - '1'
+
+---
+subtitles:
+  columns:
+  - id
+  - text
+  - created_at
+  - updated_at
+  - voice
+  - start_time
+  - end_time
+  - subtitle_track_id
+  - video_id
+  records: 
+  - - '529'
+    - What is machine learning?
+    - '2012-03-28 06:46:00'
+    - '2012-03-28 06:46:07'
+    - '0'
+    - '0.258569002151489'
+    - '1.71096503734589'
+    - '33'
+    - '2'
+  - - '530'
+    - In this video, we will try to define what it is and also try to get a sense
+      of when you want to use machine learning.
+    - '2012-03-28 06:46:13'
+    - '2012-03-28 06:47:06'
+    - '0'
+    - '1.73698902130127'
+    - '7.48647499084473'
+    - '33'
+    - '2'
+  - - '531'
+    - Even among machine learning&nbsp;practitioners, there isn't a well-accepted
+      definition of what is and what isn't machine learning.
+    - '2012-03-28 06:47:09'
+    - '2012-03-28 06:47:55'
+    - '0'
+    - '8.4000940322876'
+    - '15.1345081329346'
+    - '33'
+    - '2'
+  - - '532'
+    - Let me show you a couple of examples of the ways that people have tried to define
+      it.
+    - '2012-03-28 06:47:16'
+    - '2012-03-28 06:49:12'
+    - '0'
+    - '15.5831810318174'
+    - '20.2674785934629'
+    - '33'
+    - '2'
+  - - '534'
+    - Here's a definition of "what is machine learning" due to Arthur Samuel.
+    - '2012-03-28 06:48:36'
+    - '2012-03-28 06:49:31'
+    - '0'
+    - '20.3643843029432'
+    - '24.9685059714346'
+    - '33'
+    - '2'
+  - - '535'
+    - He defined machine learning as the field of study that gives computers the ability
+      to learn without being explicitly programmed.
+    - '2012-03-28 06:49:36'
+    - '2012-03-28 13:30:36.55621'
+    - '0'
+    - '24.9685059714346'
+    - '31.8289834189444'
+    - '33'
+    - '2'
+  - - '536'
+    - Samuel's claim to fame was that back in the 1950s, he wrote a checkers playing
+      program.
+    - '2012-03-28 06:50:07'
+    - '2012-03-28 06:50:26'
+    - '0'
+    - '33.0373611450195'
+    - '38.6824989318848'
+    - '33'
+    - '2'
+  - - '537'
+    - And the amazing thing about this checkers playing program was that Arthur Samuel
+      himself wasn't a good checkers player.
+    - '2012-03-28 06:50:29'
+    - '2012-03-28 07:17:03'
+    - '0'
+    - '38.781'
+    - '45.6690673828125'
+    - '33'
+    - '2'
+  - - '538'
+    - What he did was he had the program play tens of thousands of games against itself,
+    - '2012-03-28 06:51:10'
+    - '2012-03-28 06:52:18'
+    - '0'
+    - '46.2227668762207'
+    - '49.804'
+    - '33'
+    - '2'
+  - - '539'
+    - and by what sorts of board positions tended to lead to wins, and what sort of
+      board positions tended to be to losses,
+    - '2012-03-28 06:51:21'
+    - '2012-03-28 06:52:43'
+    - '0'
+    - '50.157'
+    - '56.5637092590332'
+    - '33'
+    - '2'
+  - - '540'
+    - the checkers playing program learned over time what are good board positions,
+      and what are bad board positions
+    - '2012-03-28 06:51:28'
+    - '2012-03-28 06:53:10'
+    - '0'
+    - '56.9135513305664'
+    - '62.8639689351723'
+    - '33'
+    - '2'
+  - - '541'
+    - and eventually learned to play checkers better than Arthur Samuel himself was
+      able to.
+    - '2012-03-28 06:51:42'
+    - '2012-03-28 06:53:35'
+    - '0'
+    - '63.3272857666016'
+    - '67.6317977905273'
+    - '33'
+    - '2'
+  - - '542'
+    - This was a remarkable result. Arthur Samuel himself turned out not to be a very
+      good checkers player
+    - '2012-03-28 06:53:37'
+    - '2012-03-28 06:54:07'
+    - '0'
+    - '68.3877487182617'
+    - '73.809'
+    - '33'
+    - '2'
+  - - '543'
+    - but because the computer has the patience to play tens of thousands of games
+      against itself
+    - '2012-03-28 06:53:43'
+    - '2012-03-28 06:54:29'
+    - '0'
+    - '74.3436813354492'
+    - '79.1652679443359'
+    - '33'
+    - '2'
+  - - '544'
+    - -- no human has the patience to play that many games --
+    - '2012-03-28 06:53:48'
+    - '2012-03-28 06:54:41'
+    - '0'
+    - '79.4015655517578'
+    - '82.3054275512695'
+    - '33'
+    - '2'
+  - - '545'
+    - By doing this a computer was able to get so much checkers playing experience
+    - '2012-03-28 06:54:46'
+    - '2012-03-28 06:55:31'
+    - '0'
+    - '82.6971084302126'
+    - '87.6553933039727'
+    - '33'
+    - '2'
+  - - '546'
+    - that it eventually became a better player than Arthur Samuel himself.
+    - '2012-03-28 06:54:50'
+    - '2012-03-28 06:55:52'
+    - '0'
+    - '87.6669158935547'
+    - '91.9068603515625'
+    - '33'
+    - '2'
+  - - '547'
+    - This is a somewhat informal definition, and an older one.
+    - '2012-03-28 06:55:56'
+    - '2012-03-28 06:56:19'
+    - '0'
+    - '92.9566497802734'
+    - '96.1495056152344'
+    - '33'
+    - '2'
+  - - '548'
+    - Here's a slightly more recent definition by Tom Mitchell, who's a friend over
+      at Carnegie Mellon.
+    - '2012-03-28 06:56:23'
+    - '2012-03-28 06:56:42'
+    - '0'
+    - '96.3559265136719'
+    - '101.261451721191'
+    - '33'
+    - '2'
+  - - '549'
+    - So Tom defines machine learning by saying that -
+    - '2012-03-28 06:56:46'
+    - '2012-03-28 06:57:18'
+    - '0'
+    - '101.827110290527'
+    - '105.000648498535'
+    - '33'
+    - '2'
+  - - '550'
+    - the well-posed learning problem is defined as follows.
+    - '2012-03-28 06:57:21'
+    - '2012-03-28 06:58:12'
+    - '0'
+    - '105.192886352539'
+    - '107.665614401647'
+    - '33'
+    - '2'
+  - - '551'
+    - He says, a computer program is said to learn from experience E with respect
+      to some task T and some performance measure P,
+    - '2012-03-28 06:57:54'
+    - '2012-03-28 06:58:47'
+    - '0'
+    - '108.19685920955'
+    - '115.093580095781'
+    - '33'
+    - '2'
+  - - '552'
+    - if its performance on T, as measured by P, improves with experience E.
+    - '2012-03-28 06:58:56'
+    - '2012-03-28 06:59:26'
+    - '0'
+    - '115.236'
+    - '120.211'
+    - '33'
+    - '2'
+  - - '553'
+    - I actually think he came up with this definition just to make it rhyme.
+    - '2012-03-28 06:59:29'
+    - '2012-03-28 07:00:01'
+    - '0'
+    - '120.450012207031'
+    - '123.913772583008'
+    - '33'
+    - '2'
+  - - '554'
+    - For the checkers-playing example, the experience E would be the experience of
+      having the program play tens of thousands of games against itself.
+    - '2012-03-28 07:00:07'
+    - '2012-03-28 07:01:20'
+    - '0'
+    - '124.289527893066'
+    - '132.415191650391'
+    - '33'
+    - '2'
+  - - '555'
+    - The task T would be the task of playing checkers,
+    - '2012-03-28 07:00:50'
+    - '2012-03-28 07:01:38'
+    - '0'
+    - '133.049713134766'
+    - '136'
+    - '33'
+    - '2'
+  - - '556'
+    - and the performance measure P would be the probability that it wins the next
+      game of checkers against some opponent.
+    - '2012-03-28 07:01:24'
+    - '2012-03-28 07:02:30'
+    - '0'
+    - '136.531707763672'
+    - '143.367462158203'
+    - '33'
+    - '2'
+  - - '557'
+    - Throughout these videos, besides me trying to teach you stuff, I'll ask you
+      a question to make sure you understand the content.
+    - '2012-03-28 07:03:57'
+    - '2012-03-28 07:04:37'
+    - '0'
+    - '144.577317435591'
+    - '152.045548636763'
+    - '33'
+    - '2'
+  - - '558'
+    - On top is the definition of machine learning, by Tom Mitchell --
+    - '2012-03-28 07:04:50'
+    - '2012-03-28 07:05:21'
+    - '0'
+    - '152.150970458984'
+    - '156.962280273438'
+    - '33'
+    - '2'
+  - - '559'
+    - Let's say your email program watches which emails you do or do not flag as spam,
+      so
+    - '2012-03-28 07:05:22'
+    - '2012-03-28 07:05:47'
+    - '0'
+    - '157.661117553711'
+    - '162.663177490234'
+    - '33'
+    - '2'
+  - - '560'
+    - an email program like this you might click this spam button to report some email
+      as spam but not other emails.
+    - '2012-03-28 07:05:54'
+    - '2012-03-28 07:06:45'
+    - '0'
+    - '163.062576293945'
+    - '169.619018554688'
+    - '33'
+    - '2'
+  - - '562'
+    - And, based on which emails you mark as spam, say your email program learns better
+      how to filter spam email.
+    - '2012-03-28 07:06:50'
+    - '2012-03-28 07:07:32'
+    - '0'
+    - '169.860488891602'
+    - '178.096969604492'
+    - '33'
+    - '2'
+  - - '563'
+    - What is the task T in this setting?
+    - '2012-03-28 07:07:33'
+    - '2012-03-28 07:07:44'
+    - '0'
+    - '178.806427001953'
+    - '181.373748779297'
+    - '33'
+    - '2'
+  - - '564'
+    - In a few seconds, the video will pause, and when it does so, you can use your
+      mouse to select one of these four radio buttons,
+    - '2012-03-28 07:07:46'
+    - '2012-03-28 07:08:38'
+    - '0'
+    - '181.827255249023'
+    - '188.929656982422'
+    - '33'
+    - '2'
+  - - '565'
+    - to let me know which of these four you think is the right answer to this question.
+    - '2012-03-28 07:08:27'
+    - '2012-03-28 07:08:50'
+    - '0'
+    - '189.184555053711'
+    - '193.855224609375'
+    - '33'
+    - '2'
+  - - '566'
+    - So, hopefully you got that this is the right answer - classifying emails is
+      the task T.
+    - '2012-03-28 07:08:51'
+    - '2012-03-28 07:09:37'
+    - '0'
+    - '195.62196216285'
+    - '201.523077160221'
+    - '33'
+    - '2'
+  - - '567'
+    - This definition defines a task T and a performance measure P,
+    - '2012-03-28 07:09:48'
+    - '2012-03-28 07:10:34'
+    - '0'
+    - '202.261184692383'
+    - '205.679260253906'
+    - '33'
+    - '2'
+  - - '568'
+    - and this experience E,
+    - '2012-03-28 07:10:34'
+    - '2012-03-28 07:10:51'
+    - '0'
+    - '206.093292236328'
+    - '209.227645874023'
+    - '33'
+    - '2'
+  - - '569'
+    - and so watching you label emails as spam or not spam, this would be the experience
+      E,
+    - '2012-03-28 07:10:54'
+    - '2012-03-28 07:12:24'
+    - '0'
+    - '210.0107421875'
+    - '216.347610473633'
+    - '33'
+    - '2'
+  - - '570'
+    - and the fraction of emails correctly classified; that might be your performance
+      measure P.
+    - '2012-03-28 07:11:35'
+    - '2012-03-28 07:12:41'
+    - '0'
+    - '216.570920403518'
+    - '221.978284295119'
+    - '33'
+    - '2'
+  - - '572'
+    - and so, our task performance - our system's performance on the task T on the
+      performance measure P will improve after the experience E.
+    - '2012-03-28 07:13:08'
+    - '2012-03-28 07:14:36'
+    - '0'
+    - '222.878733866924'
+    - '234.91996311497'
+    - '33'
+    - '2'
+  - - '573'
+    - In this class, I hope to teach you about the various types of learning algorithms.
+    - '2012-03-28 07:14:51'
+    - '2012-03-28 07:15:10'
+    - '0'
+    - '235.354583740234'
+    - '238.973281860352'
+    - '33'
+    - '2'
+  - - '582'
+    - DRG coming from the loser bracket, he has to win a best of 3 -
+    - '2012-03-28 07:25:27'
+    - '2012-03-28 07:25:56'
+    - '0'
+    - '5.1907190209077'
+    - '11.004'
+    - '337'
+    - '21'
+  - - '583'
+    - if he does not win two out of the first three games, then MarineKing has won
+      and he is our champion -&nbsp;
+    - '2012-03-28 07:26:04'
+    - '2012-03-28 07:26:52'
+    - '0'
+    - '11.13'
+    - '16.994'
+    - '337'
+    - '21'
+  - - '584'
+    - and if he does, it turns into a best of 7, and of course, $10,000 on the line,
+    - '2012-03-28 07:26:53'
+    - '2012-03-28 07:27:56'
+    - '0'
+    - '17.1693013768485'
+    - '23.5783013768485'
+    - '337'
+    - '21'
+  - - '585'
+    - as well as top seed at Columbus pool play.
+    - '2012-03-28 07:27:39'
+    - '2012-03-28 07:27:54'
+    - '0'
+    - '23.741'
+    - '26.76'
+    - '337'
+    - '21'
+  - - '586'
+    - Thank you - please, thank you very much.
+    - '2012-03-28 07:28:47'
+    - '2012-03-28 07:29:34'
+    - '0'
+    - '0.697'
+    - '4.899'
+    - '321'
+    - '20'
+  - - '587'
+    - To President Park, faculty, staff and students,
+    - '2012-03-28 07:29:40'
+    - '2012-03-28 07:32:33'
+    - '0'
+    - '6.293'
+    - '11.981'
+    - '321'
+    - '20'
+  - - '588'
+    - thank you so much for this very warm welcome, it is a great honor to be here
+      at the Hankuk University of Foreign Studies -
+    - '2012-03-28 07:30:21'
+    - '2012-03-28 07:31:10'
+    - '0'
+    - '12.283'
+    - '19.412'
+    - '321'
+    - '20'
+  - - '589'
+    - ! '[cheering]'
+    - '2012-03-28 07:31:17'
+    - '2012-03-28 07:31:34'
+    - '0'
+    - '19.714'
+    - '25.797'
+    - '321'
+    - '20'
+  - - '590'
+    - I want to thank Dr. Park for, a few moments ago, making me an honorary alumni
+      of this university.
+    - '2012-03-28 07:31:40'
+    - '2012-03-28 07:32:34'
+    - '0'
+    - '26.192'
+    - '34.04'
+    - '321'
+    - '20'
+  - - '591'
+    - Now I know that this school has one of the world's finest foreign language programs,
+      which means that your English is much better than my Korean.
+    - '2012-03-28 07:32:40'
+    - '2012-03-28 07:33:09'
+    - '0'
+    - '39.869'
+    - '47.438'
+    - '321'
+    - '20'
+  - - '592'
+    - All I can say is - kam-sa-ham-mi-da. [cheers]
+    - '2012-03-28 07:33:18'
+    - '2012-03-28 07:34:09'
+    - '0'
+    - '50.667'
+    - !!null 
+    - '321'
+    - '20'
