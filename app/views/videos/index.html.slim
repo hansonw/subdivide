@@ -24,7 +24,5 @@
                   | Uploaded by 
                   a href="http://www.youtube.com/user/#{video.uploader}" #{video.uploader}
               div.videoDesc #{truncate(video.desc, :length => 100)}
-              div.videoSubPercent
-                | #{"%.2f" % video.sub_percent()}% subbed
               div.videoViews
-                | Views: #{video.views}
+                | Views: #{video.views} / #{"%.2f" % video.sub_percent()}% subbed
