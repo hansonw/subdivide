@@ -1,0 +1,175 @@
+
+---
+subtitles:
+  columns:
+  - id
+  - text
+  - created_at
+  - updated_at
+  - video_id
+  - voice
+  - start_time
+  - end_time
+  records: 
+  - - '481'
+    - speech
+    - '2012-03-25 03:22:20.170702'
+    - '2012-03-25 03:22:20.845513'
+    - '3'
+    - '0'
+    - '180'
+    - '245'
+  - - '523'
+    - speech
+    - '2012-03-27 23:49:11.152294'
+    - '2012-03-27 23:49:14.78553'
+    - '12'
+    - '0'
+    - '171.015'
+    - '183.684'
+  - - '524'
+    - speech
+    - '2012-03-27 23:49:12.464449'
+    - '2012-03-27 23:49:16.440507'
+    - '12'
+    - '0'
+    - '249.62672244898'
+    - '267.110306122449'
+  - - '525'
+    - speech
+    - '2012-03-28 02:00:00.621227'
+    - '2012-03-28 02:00:05.692901'
+    - '16'
+    - '0'
+    - '72.3122448979592'
+    - '73.055'
+  - - '528'
+    - Let the magic happen!
+    - '2012-03-28 03:24:54.513112'
+    - '2012-03-28 03:25:04.074549'
+    - '16'
+    - '0'
+    - '99.6428571428571'
+    - '121.746'
+
+---
+videos:
+  columns:
+  - id
+  - url
+  - created_at
+  - updated_at
+  - uuid
+  - title
+  - yt_url
+  - thumbnail
+  - uploader
+  - desc
+  - duration
+  - views
+  records: 
+  - - '2'
+    - //iterate.ca/video.webm
+    - '2012-01-07 22:34:09.897377'
+    - '2012-03-28 04:28:46.283062'
+    - dfae471f-781b-4cfb-9829-bca4e1d1c118
+    - What is Machine Learning?
+    - !!null 
+    - /assets/ml-thumbnail.png
+    - !!null 
+    - An introductory lecture from Stanford's AI online course.
+    - '434'
+    - '26'
+  - - '16'
+    - !!null 
+    - '2012-03-28 00:14:50.076235'
+    - '2012-03-28 04:07:24.069748'
+    - affe008b-c092-4931-9851-0647d34b34d3
+    - improvisation no93 - The Inverted Keyboard
+    - 6OVkiQ_3dmQ
+    - http://i.ytimg.com/vi/6OVkiQ_3dmQ/0.jpg
+    - kylelandry
+    - ! 'http://kylelandry.com
+
+      http://facebook.com/kylelandrypiano
+
+      http://twitter.com/kylelandrypiano
+
+
+      Thought this specific challenge was the best so I tried it out.  It was pretty
+      difficult! Also, if anyone w'
+    - '279'
+    - '53'
+  - - '18'
+    - !!null 
+    - '2012-03-28 02:52:33.449291'
+    - '2012-03-28 04:10:11.946554'
+    - 68d32e67-1dba-448b-8f07-ab095f91c29e
+    - Ten Thousand 2D Random Walks
+    - NBdBFQbsfmc
+    - http://i.ytimg.com/vi/NBdBFQbsfmc/0.jpg
+    - daveagp
+    - ! 'This is a video of 10000 particles taking random walks in two dimensions.
+      At each time step, every particle moves 1 unit in a random direction. The spreadsheet
+      is from excelunusual.com.
+
+
+      You can see in'
+    - '125'
+    - '2'
+  - - '19'
+    - !!null 
+    - '2012-03-28 02:52:48.206561'
+    - '2012-03-28 02:52:48.277974'
+    - 738a838f-9239-4917-8435-d9b98a2dbd38
+    - ! 'BBC Horizon: Do you see what I see? "The Himba tribe"'
+    - 4b71rT9fU-I
+    - http://i.ytimg.com/vi/4b71rT9fU-I/0.jpg
+    - TheNeekerirotta
+    - ! 'All rights owned by BBC.
+
+
+      This is the most essential part of the documentary, whether people see colors
+      differently or not.'
+    - '476'
+    - '1'
+  - - '20'
+    - !!null 
+    - '2012-03-28 02:53:07.073278'
+    - '2012-03-28 02:53:07.229428'
+    - 4f9f9349-aa09-499e-8568-4c63852a4f14
+    - President Obama Speaks at Hankuk University
+    - 78JPYA7fqzQ
+    - http://i.ytimg.com/vi/78JPYA7fqzQ/0.jpg
+    - whitehouse
+    - President Obama speaks to faculty, staff and students of Hankuk University in
+      Seoul about global progress toward nuclear non-proliferation. March 26, 2012.
+    - '1778'
+    - '1'
+  - - '21'
+    - !!null 
+    - '2012-03-28 02:55:03.127991'
+    - '2012-03-28 02:55:03.259302'
+    - b99d0cdb-5463-423b-b752-016bbbf9b6ca
+    - Winter Arena Highlights - Day 3 - DRG vs MKP
+    - 0k42BaHsrVE
+    - http://i.ytimg.com/vi/0k42BaHsrVE/0.jpg
+    - MajorLeagueGaming
+    - Highlights from the match between DRG and MKP from Day 3 of the Winter Arena
+      Central stream.
+    - '783'
+    - '1'
+  - - '22'
+    - !!null 
+    - '2012-03-28 03:26:22.847483'
+    - '2012-03-28 03:26:22.9854'
+    - 28ba7408-3755-4edc-8b33-08083517f559
+    - Google Chrome Speed Tests
+    - nCgQDjiotG0
+    - http://i.ytimg.com/vi/nCgQDjiotG0/0.jpg
+    - googlechrome
+    - ! "These speed tests were filmed at actual web page rendering times. If you're
+      interested in the technical details, read on!\r\n\r\nEquipment used: \r\n\r\n-
+      Computer: MacBook Pro laptop with Windows installed\r\n-"
+    - '130'
+    - '1'
