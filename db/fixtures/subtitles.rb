@@ -53,3 +53,4 @@ Subtitle.seed(
   {"created_at"=>"2012-03-28T07:32:40Z", "end_time"=>47.438, "id"=>591, "start_time"=>39.869, "text"=>"Now I know that this school has one of the world's finest foreign language programs, which means that your English is much better than my Korean.", "updated_at"=>"2012-03-28T07:33:09Z", "video_id"=>20, "voice"=>0},
   {"created_at"=>"2012-03-28T07:33:18Z", "end_time"=>nil, "id"=>592, "start_time"=>50.667, "text"=>"All I can say is - kam-sa-ham-mi-da. [cheers]", "updated_at"=>"2012-03-28T07:34:09Z", "video_id"=>20, "voice"=>0}
 )
+
