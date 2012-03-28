@@ -8,10 +8,8 @@ class SubtitlesController < ApplicationController
   end
   def index
     @video = Video.find(params[:video_id])
-    y @video
     #@subtitles = @video.subtitle
     @subtitles = Subtitle.all.find_all{|st| (st.subtitle_track.get_video_id() == params[:video_id].to_i)}
-    y @subtitles
     respond_to do |format|
       format.html # index.html.slim
       format.xml  { render :xml => @subtitles }
