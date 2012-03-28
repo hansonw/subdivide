@@ -256,6 +256,11 @@ h3 {
 .search_bar input {
   font-size: 1em;
   padding: .25em;
+}
+
+.search_bar .text {
+  font-size: 1em;
+  padding: .25em;
   width: 400px; 
 }
 

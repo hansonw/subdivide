@@ -129,7 +129,7 @@ class YouTubeVideo
       $("#video")[0].getVideoBytesTotal()
 
   duration: =>
-    $("#video")[0].getDuration()
+    video_info.duration
 
   width: =>
     $("#video").prop('width')

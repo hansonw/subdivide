@@ -3,9 +3,12 @@ javascript:
 
 div id="container
   div id="header"
-    img src="#{asset_path('logo.png')}" alt="subdivide" title="subdivide"
+    a href="/videos"
+      img src="#{asset_path('logo.png')}" alt="subdivide" title="subdivide"
     form class="search_bar" method="post" action="/videos"
-      input name="yt_url" placeholder="Enter YouTube URL or Title"
+      input.text name="yt_url" placeholder="Enter YouTube URL or Title"
+      | &nbsp;
+      input type="submit" name="search" value="Search"
 
   h2 #{@video.title}
 

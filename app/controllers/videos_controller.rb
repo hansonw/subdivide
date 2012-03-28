@@ -34,14 +34,24 @@ class VideosController < ApplicationController
         end
       end
       if yt_id.nil? == false
+        existing = Video.where(:yt_url => yt_id).first()
+        if !existing.nil?
+          redirect_to "/videos/" + existing.id.to_s
+          return
+        end
         # Find the title from the YouTube api
         api_uri = URI.parse('http://gdata.youtube.com/feeds/api/videos/' + yt_id)
-        api_uri.query = "alt=json&fields=title"
+        api_uri.query = "alt=json"
         resp = Net::HTTP.get(api_uri)
         json = JSON.parse(resp)
+        entry = json["entry"]
         @video = Video.new do |v|
           v.yt_url = yt_id
-          v.title = json["entry"]["title"]["$t"]
+          v.title = entry["title"]["$t"]
+          v.thumbnail = entry["media$group"]["media$thumbnail"][0]["url"]
+          v.uploader = entry["author"][0]["name"]["$t"]
+          v.desc = entry["content"]["$t"][0..200]
+          v.duration = entry["media$group"]["media$content"][0]["duration"]
         end
       end
     else
@@ -50,13 +60,23 @@ class VideosController < ApplicationController
         v.url = params[:url]
       end
     end
+    @video.views = 0
     @video.save()
     redirect_to "/videos/" + @video.id.to_s()
   end
 
   def show
     @video = Video.find(params[:id])
-    @video_json = @video.to_json
+    if !@video.nil?
+      @video_json = @video.to_json
+      if @video.views.nil?
+        @video.views = 0
+      end
+      @video.views += 1
+      @video.save()
+    else
+      redirect_to "/error"
+    end
     respond_to do |format|
       format.html # show.html.slim
       format.xml  { render :xml => @video }
