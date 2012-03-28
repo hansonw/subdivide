@@ -592,5 +592,6 @@ $(document).ready(() ->
       video = null
       window.onYouTubePlayerReady = (playerid) => init(video)
       video = new YouTubeVideo($("#video_div"), video_info.yt_url)
+    $('#export_sub').click(-> window.open('/videos/' + video_info.id + '/subtitles.sub'))
     $('#help_close').click(-> $('#help').css('display', 'none'))
 )

@@ -57,6 +57,11 @@ h3 {
   float: right;
 }
 
+#import_export {
+  position: absolute;
+  right: 0px;
+}
+
 #content {
   position: relative;
 }
@@ -202,7 +207,7 @@ h3 {
 #help {
   position: absolute;
   left: 660px;
-  top: 370px;
+  top: 400px;
   font-size: 12px;
   background: white;
   border-radius: 5px;
