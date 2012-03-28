@@ -77,7 +77,7 @@ class SubtitlesController < ApplicationController
 
   def update
     @subtitle = Subtitle.find(params[:id])
-    @video = Video.find(subtitle.subtitle_track.get_video_id())
+    @video = Video.find(@subtitle.subtitle_track.get_video_id())
     @subtitle.start_time = params[:start_time]
     @subtitle.end_time = params[:end_time] == 'null' ? nil : params[:end_time]
     @subtitle.text = params[:text]
@@ -100,7 +100,7 @@ class SubtitlesController < ApplicationController
 
   def destroy
     @subtitle = Subtitle.find(params[:id])
-    @video = Video.find(subtitle.subtitle_track.get_video_id())
+    @video = Video.find(@subtitle.subtitle_track.get_video_id())
     if @subtitle.nil? == false
       Subtitle.destroy(params[:id])
       data = {:type => 'delete_subtitle', :value => params[:id]}
