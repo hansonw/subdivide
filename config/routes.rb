@@ -2,10 +2,9 @@ Subdivide::Application.routes.draw do
 
   resources :videos do
     resources :subtitle_track_sets do
-      resources :subtitle_tracks do
-        resources :subtitles
-      end
+      resources :subtitle_tracks
     end
+    resources :subtitles
   end
   root :to => 'splash#index'
   # The priority is based upon order of creation:
