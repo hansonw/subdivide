@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120325214135) do
+ActiveRecord::Schema.define(:version => 20120327235210) do
 
   create_table "subtitle_track_sets", :force => true do |t|
     t.string   "title"
@@ -42,6 +42,13 @@ ActiveRecord::Schema.define(:version => 20120325214135) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "uuid"
+    t.string   "title"
+    t.string   "yt_url"
+    t.string   "thumbnail"
+    t.string   "uploader"
+    t.string   "desc"
+    t.integer  "duration"
+    t.integer  "views"
   end
 
 end
