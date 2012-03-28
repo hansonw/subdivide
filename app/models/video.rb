@@ -33,19 +33,17 @@ class Video < ActiveRecord::Base
   end
 
   def sub_percent
-    if !@sub_percent.nil?
-      return @sub_percent
-    end
+    return @sub_percent unless @sub_percent.nil?
     cur_start = 0
     cur_end = 0
     covered = 0
     Subtitle.where(:video_id => id).order(:start_time).each do |sub|
-      if sub.start_time > cur_end
+      if sub.start_time > cur_end + 0.3
         covered += cur_end - cur_start
         cur_start = sub.start_time
-        cur_end = sub.end_time
-      else
-        cur_end = max(cur_end, sub.end_time)
+        cur_end = sub.end_time || sub.start_time
+      elsif !sub.end_time.nil?
+        cur_end = [cur_end, sub.end_time].max
       end
     end
     return @sub_percent = 100 * (covered + (cur_end - cur_start)) / duration
