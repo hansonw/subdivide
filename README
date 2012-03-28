@@ -1,3 +1,17 @@
+
+== Hax
+
+Video.where('id > 2').each do |x|
+  x.url = nil
+  x.save()
+end
+
+Video.where('id = 2').each do |v|
+  v.yt_url = nil
+  v.uploader = nil
+  v.save()
+end
+
 == Welcome to Rails
 
 Rails is a web-application framework that includes everything needed to create
